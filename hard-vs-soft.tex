@@ -1,4 +1,5 @@
-\documentclass{article}
+\documentclass{article} % really? Olhar qual a conferência, incorporar
+                        % logo estilo e bibestilo
 \usepackage{amsmath}
 \usepackage{graphicx}
 \usepackage{url}
@@ -10,7 +11,13 @@
 \usepackage{kchicago}
 
 \newcommand{\comentario}[1]{}
+\newcommand{\superscript}[1]{\ensuremath{^{\textrm{#1}}}}
+\newcounter{notecounter}
+\newcommand{\nota}[1]{\addtocounter{notecounter}{1}\superscript{\textcolor{red}{\arabic{notecounter}}}\marginpar{\textbf{\arabic{notecounter}:
+    }#1}}
 
+\newcommand{\simul}{\textbf{Simul}} % Que criatividade. Mudar esse
+% nome depois, urgente
 
 \author{George Lima, Alexandre Passos, José Augusto Matos Santos}
 \title{Hard Reservation vs Soft Reservation for soft real-time systems}
@@ -18,9 +25,28 @@
 \begin{document}
 \maketitle
 
+\begin{abstract}
+
+In reservation-based scheduling of soft real-time tasks there are two
+broad approaches to making use of the reservation allotted to each
+server. In a \textbf{hard} reservation framework each server is
+allowed a given fraction of the total processing time, and in no
+ocasion can use more than that fraction. If in some circumstances, a
+pending task that has overrun its budget is allowed to use idle
+processing time, then the reservation is said to be
+\textbf{soft}\nota{colocar referência da definição}. It is a truth
+widely acknowledged that a system based on hard reservation is more
+predictable, if not more efficient, than a system based on soft
+reservation. In this paper we present a simulation environment for
+becnhmarking both reservation mechanisms and experimental results in
+this environment that fail to show any significant benefit either in
+predictability or in performance.
+  
+\end{abstract}
 
 \section{Introduction}
 \label{sec:introduction}
+
 
 
 \comentario{ Grande quantidade de trabalhos relativos ao uso de
@@ -38,7 +64,38 @@
   Procurar
 }
 
-\section{Metrics}
+\section{Simulation environment}
+\label{sec:simul-envir}
+
+To perform the experiments presented in this paper we implemented
+\simul{}, a simple python-based simulator for real-time scheduling
+algorithms. Its source code, the data files used in this paper and
+instructions to reproduce our results are available in
+\url{http://github.com/jamsjr/hard-versus-soft/tree/master}. \simul{}
+implements a basic EDF scheduler and, on top of it, runs both hard
+real-time periodic tasks and bandwidth sharing servers. These servers
+can be either traditional CBS servers \nota{colocar referência para
+  CBS} or a hard reservation adaptation of the CBS algorithm. Soft
+real-time tasks running on these servers either have their execution
+times sampled from a probability distribution or follow traces
+generated from a modified version of mplayer\nota{citar mplayer?} that
+reports the start time and decoding cost for each frame in a
+high-definition video running on a XXX\nota{pegar info do pc de
+  eduardo}.
+
+\subsection{CBS}
+\label{sec:cbs}
+
+
+
+\comentario{
+* Simulação
+  
+  Descrição do ambiente, modelo de tarefas, dados de entrada, etc.
+}
+
+
+\section{Performance Metrics}
 \label{sec:metrics}
 
 \comentario{   
@@ -53,14 +110,6 @@
 ** Intervalo entre deadlines
 }
 
-\section{Simulation environment}
-\label{sec:simul-envir}
-
-\comentario{
-* Simulação
-  
-  Descrição do ambiente, modelo de tarefas, dados de entrada, etc.
-}
 
 \section{Simulation Results}
 \label{sec:simulation-results}
