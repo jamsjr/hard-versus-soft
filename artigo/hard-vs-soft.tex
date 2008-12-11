@@ -1,6 +1,7 @@
 \documentclass{article} % really? Olhar qual a conferência, incorporar
                         % logo estilo e bibestilo
 \usepackage{amsmath}
+\usepackage{amsthm}
 \usepackage{graphicx}
 \usepackage{url}
 \usepackage[utf8x]{inputenc}
@@ -10,11 +11,25 @@
 \usepackage{times}
 \usepackage{kchicago}
 
+\newtheorem{theorem}{Theorem}[section]
+
 \newcommand{\comentario}[1]{}
 \newcommand{\superscript}[1]{\ensuremath{^{\textrm{#1}}}}
 \newcounter{notecounter}
-\newcommand{\nota}[1]{\addtocounter{notecounter}{1}\superscript{\textcolor{red}{\arabic{notecounter}}}\marginpar{\textbf{\arabic{notecounter}:
-    }#1}}
+\newcommand{\nota}[1]{\addtocounter{notecounter}{1}\superscript{\textcolor{red}{\arabic{notecounter}}}
+  \marginpar{\textbf{\arabic{notecounter}: }#1}}
+
+
+\newcommand{\gnota}[1]{
+  \addtocounter{notecounter}{1}
+  \vspace{.5cm}
+  \framebox{
+    \begin{minipage}{0.95\linewidth}
+      \textbf{nota \arabic{notecounter}:} #1
+    \end{minipage}
+}
+  \vspace{.5cm}
+}
 
 \newcommand{\simul}{\textbf{Simul}} % Que criatividade. Mudar esse
 % nome depois, urgente
@@ -27,29 +42,94 @@
 
 \begin{abstract}
 
-In reservation-based scheduling of soft real-time tasks there are two
-broad approaches to making use of the reservation allotted to each
-server. In a \textbf{hard} reservation framework each server is
-allowed a given fraction of the total processing time, and in no
-ocasion can use more than that fraction. If in some circumstances, a
-pending task that has overrun its budget is allowed to use idle
-processing time, then the reservation is said to be
-\textbf{soft}\nota{colocar referência da definição}. It is a truth
-widely acknowledged that a system based on hard reservation is more
-predictable, if not more efficient, than a system based on soft
-reservation. In this paper we present a simulation environment for
-becnhmarking both reservation mechanisms and experimental results in
-this environment that fail to show any significant benefit either in
-predictability or in performance.
+  When scheduling soft real-time tasks it is usually a good idea to
+  reserve fractions of the total bandwidth to each task (or task
+  group). This reservation might be either \textbf{hard}, when under
+  no circumstances a task might use some extra bandwidth, or
+  \textbf{soft}, if there are some situations when it is allowed to do
+  so. Usually, specially in the context of on-line adaptative systems,
+  hard reservation is perceived to be more predictable, stricter and
+  allowing faster adaptation. In this paper we argue that, perhaps
+  surprisingly, allowing tasks to use some idle bandwidth shouldn't
+  hurt. To clarify our arguments we present the results of a few
+  experiments performed on real-life and syntetic data sets using hard
+  and soft variations of CBS, a commonly used reservation-based
+  server.
   
 \end{abstract}
 
 \section{Introduction}
 \label{sec:introduction}
 
+In reservation-based scheduling of soft real-time tasks, each task is
+allowed at most a given fraction of the total processor time. There
+are two broad approaches to using said fraction: \textbf{hard} and
+\textbf{soft} reservation. In a hard reservation framework each server
+is allowed a given fraction of the total processing time, and in no
+ocasion can use more than that fraction. If in some circumstances, a
+pending task that has overrun its budget is allowed to use idle
+processing time, then the reservation is said to be soft\nota{colocar
+  referência da definição}. It is commonly acknowledged that a system
+based on hard reservation is more predictable, if not more efficient,
+than a system based on soft reservation. In this paper we present a
+simulation environment for becnhmarking both reservation mechanisms
+and experimental results in this environment that fail to show any
+significant benefit either in predictability or in performance.
 
 
-\comentario{ Grande quantidade de trabalhos relativos ao uso de
+\gnota{
+    
+É interessante discutir o teorema de butazzo do livro, pag 122
+
+\begin{theorem}
+  Given a CBS server with the hard reservation rule, and with
+  parameters $(Q,P)$, if $k =
+  \left\lceil\frac{t-(P-Q)}{P}\right\rceil$, the partition with the
+  maximum delay that it can generate has the following least supply
+  function $S^*(t)$:
+  \[ S^*(t) = \left\{ \begin{array}{ll}
+      0 & \text{if}\ t \in [0,P-Q] \\
+      (k-1)Q & \text{if}\ t \in (kP - Q, (k+1)P-2Q) \\
+      t-(k+1)(P-Q) & \text{otherwise.}
+    \end{array}\right.
+  \]
+\end{theorem}
+
+Esse teorema é usado pra dar limites no delay de um servidor.
+
+Isso é usado no teorema
+
+\begin{theorem}
+  Let $A$ be set of periodic or sporadic tasks
+  $\{\tau_1,\ldots,\tau_n\}$, with $\tau_i = (C_i,T_i,D_i)$, where
+  $C_i$ is the worst-case computation time, $T_i$ is the task period
+  and $D_i$ is the relative deadline. This task set is schedulable by
+  EDF scheduling algorithm on a resource partition with least supply
+  function $S^*(t)$ if and only if:
+  \[
+  \forall 0 < t \leq 2H : dbf(t) \leq S^*(t)
+  \]
+  where $H = lcm(T_1,\ldots,T_n)$ is the hyperperiod of A and $dbf(t)$
+  is the processor demand bound function, defined as
+  \[
+  dbf(t) = \sum_{i=1}^n
+  \left(\left\lfloor\frac{t-D_i}{T_i}\right\rfloor + 1\right)C_i.
+  \]
+\end{theorem}
+
+Depois disso butazzo prova a fórmula de york para o tempo de
+resposta. O primeiro desses teoremas é provado, o segundo não
+exatamente, mas paciência.
+}
+
+\comentario{ 
+
+Falta citar trabalhos que usam reserva de banda. Fazer isso como?
+
+Pedir pra george uma lista razoável de bibliografia.
+
+
+Grande quantidade de trabalhos relativos ao uso de
   reservação de banda. Falta de estudos comparativos sobre
   hard/soft. Conexão com aplicações que poderiam se beneficiar do
   estudo.
@@ -119,6 +199,6 @@ high-definition video running on a XXX\nota{pegar info do pc de
 
 
 
-\bibliographystyle{kchicago}
-\bibliography{bib}
+%\bibliographystyle{kchicago}
+%\bibliography{bib}
 \end{document}
