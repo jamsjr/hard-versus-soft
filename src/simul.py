@@ -4,8 +4,11 @@
 from SimPy.Simulation import *
 from SimPy.SimPlot import *
 from random import expovariate
+import sys
 import os
 import math
+import ConfigParser
+import psyco; psyco.full()
 
 server_no = 0
 
@@ -160,28 +163,42 @@ def save_data_file(name, tasks):
     for t in tasks:
       f.write("%s %s\n" % (t[0], t[1]))
 
-def run():
-  soft_tasks = load_data_file("/home/top/programas/test/data/decode-trace-eve.txt")
-  
+def parse_server_list(servers):
+  return [(SoftCBS if s.startswith("s") else HardCBS) for s in servers.split()]
+
+def run(arg):
+  if len(arg) < 3:
+    print "Error. Please specify the simulation file you desire to run, as in \n   $ simul run config/example.ini"
+    sys.exit(1)
+
+  conf = ConfigParser.ConfigParser()
+  conf.readfp(open(sys.argv[2]))
+
+  print "Simulation", conf.get("simul", "name")
+  print
+  print conf.get("simul", "description")
+  print
+
+  tasks = load_data_file(conf.get("server", "tasks"))
+                         
   scheduler = Resource(name='edf',preemptable=1,monitored=True,qType=PriorityQ)
   
   initialize()
   
   servs = []
   
-  for server in [SoftCBS]:
-    t0 = make_normal_tasks(0.4, 0.01, 1, 3000)
-    t1 = make_normal_tasks(0.6, 0.01, 1, 3000)
-    t2 = make_normal_tasks(0.4, 0.01, 1, 3000)
-    s = server(lose_deadlines=True)
-    t = concatenate_tasks(concatenate_tasks(t0,t1),t2)
-    s.initialize(scheduler, t, server_util=0.5)
+  for server in parse_server_list(conf.get("server", "type")):
+    s = server(lose_deadlines=conf.getboolean("server", "discard_expired_tasks"))
+    s.initialize(scheduler, tasks, server_util=conf.getfloat("server", "util"))
     servs.append(s)
   
   p = PeriodicTask()
-  activate(p, p.start_running(scheduler, 2.5, 5, 5), at=0.)
-  
-  print simulate(9000)
+  activate(p, p.start_running(scheduler, 
+                              conf.getfloat("hard", "cost"), 
+                              conf.getfloat("hard", "period"), 
+                              conf.getfloat("hard", "deadline")), at=0.)
+  print "Starting simulation"
+  print simulate(conf.getint("simul", "max_time"))
   plt = SimPlot()
   
   for s in servs:
@@ -190,16 +207,16 @@ def run():
     dead = monitors['lost_deadlines']
     print Mon.name, "lost %2.2f%%" % (100.*len(dead)/(len(Mon)+len(dead))),
     print "of the deadlines"
-    for mon in 'response_time', 'resp_int', 'lateness', 'delay_time':
+    for mon in conf.get("monitors", "report_means_for").split():
       Mon = monitors[mon]
       if len(Mon):
         print Mon.name, Mon.mean(), "stddev", math.sqrt(Mon.var())
-    for m in 'response_time', 'resp_int', 'lateness', 'delay_time':
+    for m in conf.get("monitors", "make_histograms_for").split():
       m = monitors[m]
       if len(m):
         print m.name
         plt.plotLine(m,yaxis='automatic',xlab="Monitor "+m.name)
-    for h in 'response_time', 'resp_int', 'lateness', 'delay_time':
+    for h in conf.get("monitors", "make_plots_for").split():
       h = monitors[h]
       if len(h):
         print h.name
@@ -210,4 +227,4 @@ def run():
 print "Loaded"
 
 if __name__ == '__main__':
-  run()
+  run(sys.argv)
