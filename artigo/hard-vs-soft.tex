@@ -1,24 +1,22 @@
-\documentclass[conference,final,compsoc]{IEEEtran} % really? Olhar qual a conferência, incorporar
-                        % logo estilo e bibestilo
+\documentclass[times, 10pt,twocolumn]{article} 
+\usepackage{latex8}
+\usepackage{times}
 \usepackage{amsmath}
 \usepackage{amsthm}
 \usepackage{graphicx}
 \usepackage{url}
 \usepackage[utf8x]{inputenc}
 \usepackage[T1]{fontenc}
-%\usepackage[brazil]{babel}
 \usepackage{color}
-\usepackage{times}
-% ECRTS
-% procurar IEEE8 late8
+
+
 \newtheorem{theorem}{Theorem}[section]
 
 \newcommand{\comentario}[1]{}
 \newcommand{\superscript}[1]{\ensuremath{^{\textrm{#1}}}}
 \newcounter{notecounter}
-\newcommand{\nota}[1]{\addtocounter{notecounter}{1}\superscript{\textcolor{red}{\arabic{notecounter}}}
-  \marginpar{\textbf{\arabic{notecounter}: }#1}}
-
+\newcommand{\nota}[1]{\addtocounter{notecounter}{1}{\textcolor{red}{[nota
+      \arabic{notecounter}: #1]}}}
 
 \newcommand{\gnota}[1]{
   \addtocounter{notecounter}{1}
@@ -27,9 +25,7 @@
     \begin{minipage}{0.95\linewidth}
       \textbf{nota \arabic{notecounter}:} #1
     \end{minipage}
-}
-  \vspace{.5cm}
-}
+  }\vspace{.5cm}}
 
 \newcommand{\simul}{\textbf{Simul}} % Que criatividade. Mudar esse
 % nome depois, urgente
@@ -76,6 +72,24 @@ simulation environment for becnhmarking both reservation mechanisms
 and experimental results in this environment that fail to show any
 significant benefit either in predictability or in performance.
 
+\subsection{Related work}
+\label{sec:related-work}
+
+In a paper on QoS management thourgh adaptive reservations
+\cite{abeni.ea05:qos}, Abeni et al use a hard reservation approach to
+help adaptivity. The need for such a restriction on the reservation
+will be studied \nota{colocar um experimento com hard e soft
+  corretamente dimensionados e variância maior/menor pra ver o que
+  acontece} later in this paper.
+
+\subsection{Contributions of this paper}
+\label{sec:contr-this-paper}
+
+The main contribution of this paper is putting into perspective the
+perceived characteristics of hard reservation. There is a lack in
+literature of experiments in a fair environment that measure
+objectively the possible benefits and costs of using hard and soft
+reservation in a given system.
 
 \gnota{
     
@@ -127,19 +141,11 @@ exatamente, mas paciência.
 
 medir número de preempções, é complicado, mas com simpy novo deve dar
 
-Falta citar trabalhos que usam reserva de banda. Fazer isso como?
-
-Pedir pra george uma lista razoável de bibliografia.
-
 
 Grande quantidade de trabalhos relativos ao uso de reservação de
 banda. Falta de estudos comparativos sobre hard/soft. Conexão com
 aplicações que poderiam se beneficiar do estudo.
 
-** Adaptatividade
-   
-falar que imaginam que hard é mais adaptativo que soft; mentira, dizer
-que a simulação desprova isso
 
 }
 
@@ -193,11 +199,19 @@ high-definition video running on a XXX\nota{pegar info do pc de
 \section{Simulation Results}
 \label{sec:simulation-results}
 
+As can be seen in figures \note{colocar as figuras}, soft reservation
+usually outperforms hard reservation, having a smaller average
+response time as well as a smaller worst-case response time, a shorter
+delay between task arrival and start of execution, and a more uniform
+interval between successive task terminations. Aside from the obvious
+capacity of using extra free-time in a soft reservation framework,
+some counter-intuitive 
+
 \section{Conclusion}
 \label{sec:conclusion}
 
 
 
-%\bibliographystyle{kchicago}
-%\bibliography{bib}
+\bibliographystyle{plain}
+\bibliography{bib}
 \end{document}

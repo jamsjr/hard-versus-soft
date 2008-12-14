@@ -155,6 +155,11 @@ def concatenate_tasks(t1, t2):
   dmax = t1[-1][2]
   return t1 + [(a+dmax,c,d+dmax) for a,c,d in t2]
 
+def save_data_file(name, tasks):
+  with file(name, "w") as f:
+    for t in tasks:
+      f.write("%s %s\n" % (t[0], t[1]))
+
 def run():
   soft_tasks = load_data_file("/home/top/programas/test/data/decode-trace-eve.txt")
   
