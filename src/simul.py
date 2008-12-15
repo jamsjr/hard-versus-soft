@@ -2,7 +2,6 @@
 # coding: utf-8
 
 from SimPy.Simulation import *
-from SimPy.SimPlot import *
 import random
 import sys
 import os
@@ -166,9 +165,48 @@ def save_data_file(name, tasks):
 def parse_server_list(servers):
   return [(SoftCBS if s.startswith("s") else HardCBS) for s in servers.split()]
 
+def run_plots(servs, conf):
+  base_name = conf.get("monitors", "write_things_in")
+  plot_string = "plot 0 "
+  histo_string = "plot 0 "
+  
+  for s in servs:
+    monitors = s.monitors
+    Mon = monitors['response_time']
+    dead = monitors['lost_deadlines']
+    print Mon.name, "lost %2.2f%%" % (100.*len(dead)/(len(Mon)+len(dead))),
+    print "of the deadlines"
+    for mon in conf.get("monitors", "report_means_for").split():
+      Mon = monitors[mon]
+      if len(Mon):
+        print Mon.name, Mon.mean(), "stddev", math.sqrt(Mon.var())
+    for mon in conf.get("monitors", "make_histograms_for").split():
+      m = monitors[mon]
+      name = base_name+mon+"-points.data"
+      save_data_file(name, m)
+      plot_string += ", \"%s\" using 1:2 title \"%s\" with points " % (name, name)
+    for h in conf.get("monitors", "make_plots_for").split():
+      h = monitors[h]
+      if len(h):
+        print h.name
+        name = base_name+mon+"-histo.data"
+        Histo = h.histogram(low=0.,high=max(a[1] for a in h),nbins=400)
+        save_data_file(name, m)
+        histo_string += (", \"%s\" using 1:2 title \"%s\" with impulses" % 
+                         (name, name))
+  if conf.getboolean("monitors", "run_gnuplot"):
+    p1 =  subprocess.Popen("gnuplot", stdin=subprocess.PIPE, stdout=None)
+    p1.stdin.write(plot_string+"\n")
+    p1.stdin.write(histo_string+"\n")
+    p1.stdin.flush()
+    p1.stdin.close()
+    p1.wait()
+
+
 def run(arg):
   if len(arg) < 3:
-    print "Error. Please specify the simulation file you desire to run, as in \n   $ simul run config/example.ini"
+    print ("Error. Please specify the simulation file you desire to run,"
+           " as in \n   $ simul run config/example.ini")
     sys.exit(1)
 
   conf = ConfigParser.ConfigParser()
@@ -199,42 +237,8 @@ def run(arg):
                               conf.getfloat("hard", "deadline")), at=0.)
   print "Starting simulation"
   print simulate(conf.getint("simul", "max_time"))
-  
-  base_name = conf.get("monitors", "write_things_in")
-  plot_string = "plot 0 "
-  histo_string = "plot 0 "
-  
-  for s in servs:
-    monitors = s.monitors
-    Mon = monitors['response_time']
-    dead = monitors['lost_deadlines']
-    print Mon.name, "lost %2.2f%%" % (100.*len(dead)/(len(Mon)+len(dead))),
-    print "of the deadlines"
-    for mon in conf.get("monitors", "report_means_for").split():
-      Mon = monitors[mon]
-      if len(Mon):
-        print Mon.name, Mon.mean(), "stddev", math.sqrt(Mon.var())
-    for mon in conf.get("monitors", "make_histograms_for").split():
-      m = monitors[mon]
-      name = base_name+mon+"-points.data"
-      save_data_file(name, m)
-      plot_string += ", \"%s\" using 1:2 title \"%s\" with points " % (name, name)
-    for h in conf.get("monitors", "make_plots_for").split():
-      h = monitors[h]
-      if len(h):
-        print h.name
-        name = base_name+mon+"-histo.data"
-        Histo = h.histogram(low=0.,high=max(a[1] for a in h),nbins=400)
-        save_data_file(name, m)
-        histo_string += ", \"%s\" using 1:2 title \"%s\" with impulses" % (name, name)
-  if conf.getboolean("monitors", "run_gnuplot"):
-    p1 =  subprocess.Popen("gnuplot", stdin=subprocess.PIPE)
-    p2 =  subprocess.Popen("gnuplot", stdin=subprocess.PIPE)
-    p1.stdin.write(plot_string+"\n")
-    p2.stdin.write(histo_string+"\n")
-    p1.stdin.flush()
-    p2.stdin.flush()
-    raw_input("Press enter to exit")
+  run_plots(servs, conf)
+  os.system("touch \"%s\"" % (sys.argv[2][:-3]+"done"))
 
 print "Loaded"
 
