@@ -3,12 +3,12 @@
 
 from SimPy.Simulation import *
 from SimPy.SimPlot import *
-from random import expovariate
+import random
 import sys
 import os
+import subprocess
 import math
 import ConfigParser
-import psyco; psyco.full()
 
 server_no = 0
 
@@ -199,7 +199,10 @@ def run(arg):
                               conf.getfloat("hard", "deadline")), at=0.)
   print "Starting simulation"
   print simulate(conf.getint("simul", "max_time"))
-  plt = SimPlot()
+  
+  base_name = conf.get("monitors", "write_things_in")
+  plot_string = "plot 0 "
+  histo_string = "plot 0 "
   
   for s in servs:
     monitors = s.monitors
@@ -211,18 +214,27 @@ def run(arg):
       Mon = monitors[mon]
       if len(Mon):
         print Mon.name, Mon.mean(), "stddev", math.sqrt(Mon.var())
-    for m in conf.get("monitors", "make_histograms_for").split():
-      m = monitors[m]
-      if len(m):
-        print m.name
-        plt.plotLine(m,yaxis='automatic',xlab="Monitor "+m.name)
+    for mon in conf.get("monitors", "make_histograms_for").split():
+      m = monitors[mon]
+      name = base_name+mon+"-points.data"
+      save_data_file(name, m)
+      plot_string += ", \"%s\" using 1:2 title \"%s\" with points " % (name, name)
     for h in conf.get("monitors", "make_plots_for").split():
       h = monitors[h]
       if len(h):
         print h.name
+        name = base_name+mon+"-histo.data"
         Histo = h.histogram(low=0.,high=max(a[1] for a in h),nbins=400)
-        plt.plotHistogram(Histo, xlab='Time', title=h.name+" histogram",width=2)
-  plt.mainloop()
+        save_data_file(name, m)
+        histo_string += ", \"%s\" using 1:2 title \"%s\" with impulses" % (name, name)
+  if conf.getboolean("monitors", "run_gnuplot"):
+    p1 =  subprocess.Popen("gnuplot", stdin=subprocess.PIPE)
+    p2 =  subprocess.Popen("gnuplot", stdin=subprocess.PIPE)
+    p1.stdin.write(plot_string+"\n")
+    p2.stdin.write(histo_string+"\n")
+    p1.stdin.flush()
+    p2.stdin.flush()
+    raw_input("Press enter to exit")
 
 print "Loaded"
 
