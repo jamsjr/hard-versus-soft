@@ -91,9 +91,12 @@ literature of experiments in a fair environment that measure
 objectively the possible benefits and costs of using hard and soft
 reservation in a given system.
 
-\gnota{
-    
-É interessante discutir o teorema de butazzo do livro, pag 122
+\section{Analytical characteristics}
+\label{sec:analyt-char}
+
+In \cite{buttazzo05:soft}, hard reservation is introduced as a way of
+proving schedulability of a given task set using a CBS server with a
+hard reservation rule. It is done o by means of the following theorems:
 
 \begin{theorem}
   Given a CBS server with the hard reservation rule, and with
@@ -108,10 +111,6 @@ reservation in a given system.
     \end{array}\right.
   \]
 \end{theorem}
-
-Esse teorema é usado pra dar limites no delay de um servidor.
-
-Isso é usado no teorema
 
 \begin{theorem}
   Let $A$ be set of periodic or sporadic tasks
@@ -131,23 +130,18 @@ Isso é usado no teorema
   \]
 \end{theorem}
 
-Depois disso butazzo prova a fórmula de york para o tempo de
-resposta. O primeiro desses teoremas é provado, o segundo não
-exatamente, mas paciência.
-}
+For a proof of these results, see \cite{buttazzo05:soft}.
 
-\comentario{ 
+Interestingly, these theorems can be extended to a soft reservation
+framework. Intuitively, if a given task set is schedulable on a hard
+cbs server, it means that if the server budget ever runs out when
+executing a task from that task set, the task still has time to finish
+before its deadline. Since the total computation time available for a
+given server deadline is the same under both soft and hard reservation
+and no tasks from the original task set are discarded, any task set
+schedulable with the hard reservation rule is schedulable with the
+soft reservation rule. \nota{formalizar essa prova}
 
-
-medir número de preempções, é complicado, mas com simpy novo deve dar
-
-
-Grande quantidade de trabalhos relativos ao uso de reservação de
-banda. Falta de estudos comparativos sobre hard/soft. Conexão com
-aplicações que poderiam se beneficiar do estudo.
-
-
-}
 
 \section{Simulation environment}
 \label{sec:simul-envir}
@@ -159,14 +153,24 @@ instructions to reproduce our results are available in
 \url{http://github.com/jamsjr/hard-versus-soft/tree/master}. \simul{}
 implements a basic EDF scheduler and, on top of it, runs both hard
 real-time periodic tasks and bandwidth sharing servers. These servers
-can be either traditional CBS servers \nota{colocar referência para
-  CBS} or a hard reservation adaptation of the CBS algorithm. Soft
-real-time tasks running on these servers either have their execution
-times sampled from a probability distribution or follow traces
-generated from a modified version of mplayer\nota{citar mplayer?} that
-reports the start time and decoding cost for each frame in a
-high-definition video running on a XXX\nota{pegar info do pc de
+can be either traditional CBS servers \cite{abeni.ea98:integrating} or
+a hard reservation adaptation of the CBS algorithm, as described in
+\cite{buttazzo05:soft}. Soft real-time tasks running on these servers
+either have their execution times sampled from a probability
+distribution or follow traces generated from a modified version of
+mplayer that reports the start time and decoding cost for each frame
+in a high-definition video running on a XXX\nota{pegar info do pc de
   eduardo}.
+
+All the simulations performed in this paper share a common
+environment. There is a hard real-time task running in the background,
+with fixed period, execution costs and deadline. There is also one
+soft real-time server (with hard or soft reservation) running tasks
+from either the video trace or with costs drawn from a normal
+distribution. All tasks considered are periodic, or approximately
+periodic. Some other aspects of the simulation, though, are variable,
+and it is our objective to understand how they influence the behavior
+of soft or hard reservation.
 
 \subsection{Controled variables}
 \label{sec:controled-variables}
@@ -250,19 +254,38 @@ applicable.
 \section{Simulation Results}
 \label{sec:simulation-results}
 
+We found that not discarding expired tasks makes soft and hard
+reservation completely equivalent. In the absence of system idle time,
+also, both reservation schemes are equivalent. This suggests that in
+systems that are expected to be overloaded or in systems where all
+tasks must be run until completion there is no need to worry about
+using either soft or hard reservation. Also, if the server load is
+low, there is no difference, as there is no need for the soft
+reservation mechanism to use any extra bandwidth. Summarizing, the
+relevant scenarios are when
+\begin{itemize}
+\item tasks that have overrun their deadlines are discarded,
+\item there is idle time in the system,
+\item but the soft real-time server is overloaded.
+\end{itemize}
+This leaves room for wiggling the variance of execution costs and
+specific characteristics of the the task set over time.
+
+
 As can be seen in figures \nota{colocar as figuras}, soft reservation
 usually outperforms hard reservation, having a smaller average
 response time as well as a smaller worst-case response time, a shorter
 delay between task arrival and start of execution, and a more uniform
 interval between successive task terminations. Aside from the obvious
 capacity of using extra free-time in a soft reservation framework,
-some counter-intuitive 
+some counter-intuitive properties, such as dealing better with
+out-of-phase tasks, have been observed.
 
 \section{Conclusion}
 \label{sec:conclusion}
 
 
 
-\bibliographystyle{plain}
+\bibliographystyle{latex8}
 \bibliography{bib}
 \end{document}
