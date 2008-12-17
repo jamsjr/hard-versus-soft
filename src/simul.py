@@ -51,7 +51,7 @@ Eu ignoro prioridades dentro desse cbs.
 
   def initialize(self,scheduler,task,server_util=None):
     global server_no
-    server_period = mean([x[2]-x[0] for x in task])
+    server_period = mean([x[2]-x[0] for x in task[:-1]])
     self.name = tn(self)+str(server_no)
     server_no += 1
     if not server_util:
