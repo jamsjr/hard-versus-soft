@@ -168,10 +168,42 @@ reports the start time and decoding cost for each frame in a
 high-definition video running on a XXX\nota{pegar info do pc de
   eduardo}.
 
-\subsection{CBS}
-\label{sec:cbs}
+\subsection{Controled variables}
+\label{sec:controled-variables}
 
+In our simulations we studied the possible effects of the given
+variables:
+\begin{itemize}
+\item the \textbf{reservation style} can be either soft or hard, it's out
+  objective to study the differences between these two;
+\item \textbf{expired tasks} (tasks that ran over their deadlines)
+  might be discarded or not;
+\item the \textbf{execution costs} can be either from a real-life
+  trace from a movie (shown in figure \ref{fig:plot-trace-eve}) or
+  synthetic and normally distributed (seen in figure
+  \ref{fig:plot-trace-normal});
+\item when the execution costs are synthetic, their \textbf{variance}
+  determines how much they stray from their expected value;
+\item there might be \textbf{system idle time} or there might not;
+\item the \textbf{server load} might be too high---meaning not all
+  tasks can finish in the expected time---, correct---meaning all
+  tasks should finish in the expected time---, or too low---meaning
+  there will be substation idle time in the server.
+\end{itemize}
 
+\begin{figure}[t]
+  \centering
+  \includegraphics[scale=0.3]{trace-eve}
+  \caption{Execution costs over time for the trace of the movie 'eve'.}
+  \label{fig:plot-trace-eve}
+\end{figure}
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[scale=0.3]{trace-normal}
+  \caption{Normally distributed execution costs over time.}
+  \label{fig:plot-trace-normal}
+\end{figure}
 
 \comentario{
 * Simulação
@@ -199,7 +231,7 @@ high-definition video running on a XXX\nota{pegar info do pc de
 \section{Simulation Results}
 \label{sec:simulation-results}
 
-As can be seen in figures \note{colocar as figuras}, soft reservation
+As can be seen in figures \nota{colocar as figuras}, soft reservation
 usually outperforms hard reservation, having a smaller average
 response time as well as a smaller worst-case response time, a shorter
 delay between task arrival and start of execution, and a more uniform

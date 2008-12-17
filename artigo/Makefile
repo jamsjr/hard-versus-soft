@@ -1,6 +1,7 @@
 NAME=hard-vs-soft
+OTHER+=$(GNUPLOT_PDF)
 
 USE_PDFLATEX=1
 VIEWPDF=evince
 
--include ~/lib/make/latex.mk
+-include ~/.latexmk
