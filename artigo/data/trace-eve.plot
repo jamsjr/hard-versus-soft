@@ -2,6 +2,7 @@
 set terminal post enh
 set output "data/trace-eve.eps"
 
+set yrange[0:0.03]
 
 set grid
 set xlabel "Time"

@@ -2,6 +2,7 @@
 set terminal post enh
 set output "data/trace-normal.eps"
 
+set yrange[0:0.8]
 
 set grid
 set xlabel "Time"

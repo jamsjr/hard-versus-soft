@@ -8,7 +8,7 @@
 \usepackage[utf8x]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{color}
-
+\usepackage{subfig}
 
 \newtheorem{theorem}{Theorem}[section]
 
@@ -174,9 +174,7 @@ high-definition video running on a XXX\nota{pegar info do pc de
 In our simulations we studied the possible effects of the given
 variables:
 \begin{itemize}
-\item the \textbf{reservation style} can be either soft or hard, it's out
-  objective to study the differences between these two;
-\item \textbf{expired tasks} (tasks that ran over their deadlines)
+\item any \textbf{expired tasks} (tasks that ran over their deadlines)
   might be discarded or not;
 \item the \textbf{execution costs} can be either from a real-life
   trace from a movie (shown in figure \ref{fig:plot-trace-eve}) or
@@ -188,45 +186,66 @@ variables:
 \item the \textbf{server load} might be too high---meaning not all
   tasks can finish in the expected time---, correct---meaning all
   tasks should finish in the expected time---, or too low---meaning
-  there will be substation idle time in the server.
+  there will be substantial idle time in the server.
 \end{itemize}
 
-\begin{figure}[t]
+\begin{figure*}[t]
   \centering
-  \includegraphics[scale=0.3]{trace-eve}
-  \caption{Execution costs over time for the trace of the movie 'eve'.}
-  \label{fig:plot-trace-eve}
-\end{figure}
+  \subfloat[Execution costs for the trace of 'eve'.]{
+    \includegraphics[scale=0.3]{trace-eve}
+    \label{fig:plot-trace-eve}
+  }
+  \subfloat[Normally distributed execution costs over time.]{
+    \includegraphics[scale=0.3]{trace-normal}
+    \label{fig:plot-trace-normal}
+  }
+  \caption{Execution cost models used in our simulations.}
+\end{figure*}
 
-\begin{figure}[t]
-  \centering
-  \includegraphics[scale=0.3]{trace-normal}
-  \caption{Normally distributed execution costs over time.}
-  \label{fig:plot-trace-normal}
-\end{figure}
+Not all these variables highlight any difference in whether hard or
+soft reservation is better, and by how much. To study the actual
+effects of a reservation model, we chose some performance metrics to study.
 
-\comentario{
-* Simulação
-  
-  Descrição do ambiente, modelo de tarefas, dados de entrada, etc.
-}
-
-
-\section{Performance Metrics}
+\subsection{Performance Metrics}
 \label{sec:metrics}
 
-\comentario{   
-* Métricas comparativas
-  
-  Descrição e conexão com aplicações.
+In a soft real-time system the most important concern is maintaining a
+good \textbf{response time} without wasting system resources or
+prejudicating any hard real-time tasks present in the system
+\cite{buttazzo05:soft}. This suggests that a good way to measure
+performance in soft real-time systems is measuring the mean response
+time of tasks in it. This is, on the other hand, rather naïve, since
+there are many undesirable trade-offs one might make that reduce the
+mean response time for tasks and yet make a system perform overall
+worse. A simple example is that whenever tasks missing their deadlines
+are discarded one can always reduce mean response time by discarding
+all tasks with a sufficiently high cost. This clearly degrades the
+overall system performance. For this reason we're interested also in
+the mean \textbf{response interval}, which is the interval between two
+successive completions of a task. If no deadlines are missed the mean
+response interval should be near the period of the tasks, but whenever
+tasks are discarded it should go up. We propose that the mean response
+interval is a more robust estimator for the perceived performance of a
+system than the mean response time.
 
-  
-** Tempo de resposta
-   
-   
-** Intervalo entre deadlines
-}
+One supposed difference between soft and hard reservation in CBS
+servers is that, when using soft reservation, the server might pospone
+its deadline indefinitely in a period of high load, making for a very
+low responsivity afterwards. To gauge whether or not this is really a
+problem we are also measuring the mean \textbf{delay} between a task's
+arrival time and the time it starts executing. Also, to highlight any
+perceived problems of soft reservation under this condition we use the
+costs seen in figure \ref{fig:costs-trifasico}.
 
+\begin{figure}[t]
+  \centering
+  \includegraphics[scale=0.3]{trace-trifasico}
+  \caption{Execution costs designed to postpone deadlines under soft reservation.}
+  \label{fig:costs-trifasico}
+\end{figure}
+
+We also measure percentual of discarded tasks and mean lateness, when
+applicable.
 
 \section{Simulation Results}
 \label{sec:simulation-results}
