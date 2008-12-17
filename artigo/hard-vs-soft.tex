@@ -271,6 +271,49 @@ relevant scenarios are when
 This leaves room for wiggling the variance of execution costs and
 specific characteristics of the the task set over time.
 
+\begin{figure*}[t]
+  \centering
+  \subfloat[Soft reservation.]{
+    \includegraphics[scale=0.3]{trifasico-1}
+    \label{fig:soft-trifasico}
+  }
+  \subfloat[Hard reservation.]{
+    \includegraphics[scale=0.3]{trifasico-2}
+    \label{fig:hard-trifasico}
+  }
+  \caption{Response times for the costs in figure
+    \ref{fig:costs-trifasico}.}
+  \label{fig:trifasico}
+\end{figure*}
+
+For the experiment with adaptivity, the results are in figure
+\ref{fig:trifasico}. As can be seen, when the server is not under
+heavy load both soft and hard reservation perform acceptably. On the
+other hand, in the heavily loaded part only the soft reservation
+server can use finish tasks that need more than its budget. As
+expected, when the load comes back down there is no extra cost for the
+soft reservation server, and its response times are equivalent to the
+hard reservation ones.
+
+\begin{figure*}[t]
+  \centering
+  \subfloat[Soft reservation.]{
+    \includegraphics[scale=0.3]{variance-1}
+    \label{fig:soft-variance}
+  }
+  \subfloat[Hard reservation.]{
+    \includegraphics[scale=0.3]{variance-2}
+    \label{fig:hard-variance}
+  }
+  \caption{Response times for the high variance case.}
+  \label{fig:variance}
+\end{figure*}
+
+
+In the high variance experiment, the hard reservation server lost
+59.39\% of the deadlines, while the soft reservation only lost
+5.19\%. Figure \ref{fig:variance} shows the response times for this
+experiment.
 
 As can be seen in figures \nota{colocar as figuras}, soft reservation
 usually outperforms hard reservation, having a smaller average
