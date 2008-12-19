@@ -176,7 +176,16 @@ of soft or hard reservation.
 \subsection{Reservation mechanism}
 \label{sec:reserv-mech}
 
-\comment{descrever soft e hard cbs}
+The experiments described in this paper are using the CBS server
+\cite{abeni.ea98:integrating}. The original CBS server is described by
+a tuple $(Q,T)$ where $Q$ is the server capacity and $T$ is the server
+bandwidth. A CBS server runs as a hard real-time task on an EDF
+scheduler, executing for roughly $Q$ units of time every period of
+length $T$ units of time. In the soft reservation version of the CBS
+server, whenever the server capacity runs out it is recharged to its
+full value and the current server deadline is delayed by $T$ units of
+time. In the hard reservation version, the server always waits until
+the next server deadline to recharge its capacity.
 
 \subsection{Controled variables}
 \label{sec:controled-variables}
