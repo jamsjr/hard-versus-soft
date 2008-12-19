@@ -52,6 +52,7 @@ Eu ignoro prioridades dentro desse cbs.
   def initialize(self,scheduler,task,server_util=None):
     global server_no
     server_period = mean([x[2]-x[0] for x in task[:-1]])
+    print "task util", mean([x[1] for x in task])/server_period
     self.name = tn(self)+str(server_no)
     server_no += 1
     if not server_util:
@@ -180,13 +181,13 @@ def run_plots(servs, conf):
       Mon = monitors[mon]
       if len(Mon):
         print Mon.name, Mon.mean(), "stddev", math.sqrt(Mon.var())
-    for mon in conf.get("monitors", "make_histograms_for").split():
+    for mon in conf.get("monitors", "make_plots_for").split():
       m = monitors[mon]
       name = base_name+mon+"-points.data"
       save_data_file(name, m)
       plot_string += ", \"%s\" using 1:2 title \"%s\" with points " % (name, name)
-    for h in conf.get("monitors", "make_plots_for").split():
-      h = monitors[h]
+    for mon in conf.get("monitors", "make_histograms_for").split():
+      h = monitors[mon]
       if len(h):
         print h.name
         name = base_name+mon+"-histo.data"
