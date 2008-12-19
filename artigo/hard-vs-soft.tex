@@ -30,8 +30,9 @@
 \newcommand{\simul}{\textbf{Simul}} % Que criatividade. Mudar esse
 % nome depois, urgente
 
-\author{George Lima, Alexandre Passos, José Augusto Matos Santos}
-\title{Hard Reservation vs Soft Reservation for soft real-time systems}
+\author{Alexandre Passos, George Lima, José Augusto Matos Santos}
+%\address{Universidade Federal da Bahia}
+\title{Some issues with hard reservation for soft real-time systems}
 
 \begin{document}
 \maketitle
@@ -47,10 +48,10 @@
   hard reservation is perceived to be more predictable, stricter and
   allowing faster adaptation. In this paper we argue that, perhaps
   surprisingly, allowing tasks to use some idle bandwidth shouldn't
-  hurt. To clarify our arguments we present the results of a few
-  experiments performed on real-life and syntetic data sets using hard
-  and soft variations of CBS, a commonly used reservation-based
-  server.
+  hurt their performance and reliability. To clarify our arguments we
+  present the results of a few experiments performed on real-life and
+  syntetic data sets using hard and soft variations of CBS, a commonly
+  used reservation-based server.
   
 \end{abstract}
 
@@ -171,6 +172,11 @@ distribution. All tasks considered are periodic, or approximately
 periodic. Some other aspects of the simulation, though, are variable,
 and it is our objective to understand how they influence the behavior
 of soft or hard reservation.
+
+\subsection{Reservation mechanism}
+\label{sec:reserv-mech}
+
+\comment{descrever soft e hard cbs}
 
 \subsection{Controled variables}
 \label{sec:controled-variables}
@@ -315,6 +321,42 @@ In the high variance experiment, the hard reservation server lost
 5.19\%. Figure \ref{fig:variance} shows the response times for this
 experiment.
 
+\begin{figure*}[t]
+  \centering
+  \subfloat[Soft reservation.]{
+    \includegraphics[scale=0.3]{eve-1}
+    \label{fig:soft-eve}
+  }
+  \subfloat[Hard reservation.]{
+    \includegraphics[scale=0.3]{eve-2}
+    \label{fig:hard-eve}
+  }
+  \caption{Delay times for the movie trace.}
+  \label{fig:eve}
+\end{figure*}
+
+
+In the delay time experiment, we ran both a soft reservation server
+and a hard reservation server on the task set shown in figure
+\ref{fig:plot-trace-eve}. Both servers had their periods set to the
+mean period of the data set and their capacities were the mean
+costs. In the background a hard real-time task runs consuming the
+remaining processor bandwidth. As can be easily seen in figure
+\ref{fig:eve}, the delay time for the hard reservation server is
+always higher than for the soft reservation server. Also, the soft
+reservation server only lost 0.1\% of the dealines, while the hard
+reservation server lost 24.54\%. This result seems, at first,
+counter-intuitive, since the soft reservation server, by delaying its
+deadline whenever the execution costs are too high, can have an
+arbitrarily low priority. On the other hand, the same task will take
+more overall time to be served with a hard reservation server, since
+it will have to wait for capacity replenishment before continuing
+execution.
+
+
+\section{Conclusion}
+\label{sec:conclusion}
+
 As can be seen in figures \nota{colocar as figuras}, soft reservation
 usually outperforms hard reservation, having a smaller average
 response time as well as a smaller worst-case response time, a shorter
@@ -323,10 +365,6 @@ interval between successive task terminations. Aside from the obvious
 capacity of using extra free-time in a soft reservation framework,
 some counter-intuitive properties, such as dealing better with
 out-of-phase tasks, have been observed.
-
-\section{Conclusion}
-\label{sec:conclusion}
-
 
 
 \bibliographystyle{latex8}

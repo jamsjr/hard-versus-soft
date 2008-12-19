@@ -1,0 +1,15 @@
+Olá, josé ou george.
+
+Isso daqui está estruturado de forma meio estranha. O simulador está
+em src/ e o artigo está em artigo/. Para compilar o artigo, primeiro
+rode o simulador indo pra src/ e fazendo um "make". Isso deve gerar
+automaticamente todos os dados usados no artigo. Depois, vá para o
+diretório do artigo e rode "make", que o pdflatex vai compilar o
+artigo. Caveat: precisa ter algumas coisas instaladas pra isso
+funcionar, como o pacote latex-mk e a lib do genos (meu grupo de
+pesquisa) com algumas extensões interessantes pra facilitar as
+coisas. Qualquer dúvida, me mande um email. Eu posso, também,
+periodicamente mandar pdfs por email, se vcs acharem melhor.
+
+--
+ - Alexandre
