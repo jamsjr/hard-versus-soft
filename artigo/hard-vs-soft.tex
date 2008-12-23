@@ -35,6 +35,9 @@
 \title{Some issues with hard reservation for soft real-time systems}
 
 \begin{document}
+
+\graphicspath{{figs/}{data/}}
+
 \maketitle
 
 \begin{abstract}
@@ -143,19 +146,6 @@ and no tasks from the original task set are discarded, any task set
 schedulable with the hard reservation rule is schedulable with the
 soft reservation rule. \nota{formalizar essa prova}
 
-\begin{figure*}[t]
-  \centering
-  \subfloat[Execution costs for the trace of 'eve'.]{
-    \includegraphics[angle=270,scale=0.35]{trace-eve}
-    \label{fig:plot-trace-eve}
-  }
-  \subfloat[Normally distributed execution costs over time.]{
-    \includegraphics[angle=270,scale=0.35]{trace-normal}
-    \label{fig:plot-trace-normal}
-  }
-  \caption{Execution cost models used in our simulations.}
-\end{figure*}
-
 \Section{Simulation environment}
 \label{sec:simul-envir}
 
@@ -181,10 +171,11 @@ with fixed period, execution costs and deadline. There is also one
 soft real-time server (with hard or soft reservation) running tasks
 from either the video trace or with costs drawn from a normal
 distribution. All tasks considered are periodic, or approximately
-periodic. Some other aspects of the simulation, though, are variable,
-and it is our objective to understand how they influence the behavior
-of soft or hard reservation.
-
+periodic. The costs for the background task are calculated to bring
+the mean utilization of the system close to 1. Some other aspects of
+the simulation, though, are variable, and it is our objective to
+understand how they influence the behavior of soft or hard
+reservation.
 
 \SubSection{Reservation mechanism}
 \label{sec:reserv-mech}
@@ -200,25 +191,16 @@ full value and the current server deadline is delayed by $T$ units of
 time. In the hard reservation version, the server always waits until
 the next server deadline to recharge its capacity.
 
-\SubSection{Controled variables}
+\SubSection{Configuation}
 \label{sec:controled-variables}
 
 In our simulations we studied the possible effects of the given
-variables:
+configuration variables:
 \begin{itemize}
-\item any \textbf{expired tasks} (tasks that ran over their deadlines)
-  might be discarded or not;
-\item the \textbf{execution costs} can be either from a real-life
-  trace from a movie (shown in figure \ref{fig:plot-trace-eve}) or
-  synthetic and normally distributed (seen in figure
-  \ref{fig:plot-trace-normal});
-\item when the execution costs are synthetic, their \textbf{variance}
-  determines how much they stray from their expected value;
-\item there might be \textbf{system idle time} or there might not;
-\item the \textbf{server load} might be too high---meaning not all
-  tasks can finish in the expected time---, correct---meaning all
-  tasks should finish in the expected time---, or too low---meaning
-  there will be substantial idle time in the server.
+\item discard/not discard any expired tasks;
+\item high/low execution cost variance;
+\item overloaded/not overloaded system;
+\item overloaded/not overloaded server.
 \end{itemize}
 
 Not all these variables highlight any difference in whether hard or
@@ -257,23 +239,48 @@ effects of a reservation model, we chose some performance metrics to study.
   also measuring the mean \textbf{delay} between a task's arrival time
   and the time it starts executing. Also, to highlight any perceived
   problems of soft reservation under this condition we use the costs
-  seen in figure \ref{fig:costs-trifasico}.
+  seen in figure \ref{fig:plot-trace-trifasico}.
 \item \textbf{Deadline miss ratio}: when discarding unfinished tasks,
   a high \textbf{deadline miss ratio} means the system is getting less
   and less useful. One changing scheduling policies, it is always good
   to be sure this value is not getting out of control.
 \end{enumerate}
 
-
 \begin{figure}[t]
   \centering
-  \includegraphics[angle=270,scale=0.35]{trace-trifasico}
-  \caption{Execution costs designed to postpone deadlines under soft reservation.}
-  \label{fig:costs-trifasico}
+  \includegraphics[scale=0.5]{metricas}
+  \caption{Performance metrics}
+  \label{fig:metrics}
 \end{figure}
 
+\begin{figure*}[t]
+  \centering
+  \subfloat[Execution costs for the trace of 'eve'.]{
+    \includegraphics[scale=0.33]{trace-eve}
+    \label{fig:plot-trace-eve}
+  } \subfloat[Normally distributed execution costs over time. Mean 0.6
+  time units, standard deviation 0.01]{
+    \includegraphics[scale=0.33]{trace-normal}
+    \label{fig:plot-trace-normal}
+  } \\
+  \subfloat[Execution costs designed to simulate adaptivity. The
+  standard deviation is always 0.01. The mean starts at 0.4 time
+  units, goes up to 0.6 and back to 0.4.]{
+    \includegraphics[scale=0.33]{trace-trifasico}
+    \label{fig:plot-trace-trifasico}
+  }
+  \subfloat[Execution costs with low and then high variance. The mean
+  is 0.5 time units and the standard deviation starts as 0.01 and goes
+  up to 0.1.]{
+    \includegraphics[scale=0.33]{trace-variance}
+    \label{fig:plot-trace-variance}
+  }
+  \caption{Execution cost models used in our simulations.}
+  \label{fig:ex-costs}
+\end{figure*}
 
-\Section{Simulation Results}
+
+\Section{Simulation results}
 \label{sec:simulation-results}
 
 We found that not discarding expired tasks makes soft and hard
@@ -293,18 +300,25 @@ relevant scenarios are when
 This leaves room for wiggling the variance of execution costs and
 specific characteristics of the the task set over time.
 
+To verify the interesting cases, we performed some experiments with
+synthetic normally-distributed execution costs. All data sets used in
+this paper are shown in figure \ref{fig:ex-costs}.
+
+\SubSection{Synthetic task set}
+\label{sec:synthetic-task}
+
 \begin{figure*}[t]
   \centering
   \subfloat[Soft reservation.]{
-    \includegraphics[angle=270,scale=0.35]{trifasico-1}
+    \includegraphics[scale=0.33]{trifasico-1}
     \label{fig:soft-trifasico}
   }
   \subfloat[Hard reservation.]{
-    \includegraphics[angle=270,scale=0.35]{trifasico-2}
+    \includegraphics[scale=0.33]{trifasico-2}
     \label{fig:hard-trifasico}
   }
   \caption{Response times for the costs in figure
-    \ref{fig:costs-trifasico}.}
+    \ref{fig:plot-trace-trifasico}.}
   \label{fig:trifasico}
 \end{figure*}
 
@@ -320,11 +334,11 @@ hard reservation ones.
 \begin{figure*}[t]
   \centering
   \subfloat[Soft reservation.]{
-    \includegraphics[angle=270,scale=0.35]{variance-1}
+    \includegraphics[scale=0.33]{variance-1}
     \label{fig:soft-variance}
   }
   \subfloat[Hard reservation.]{
-    \includegraphics[angle=270,scale=0.35]{variance-2}
+    \includegraphics[scale=0.33]{variance-2}
     \label{fig:hard-variance}
   }
   \caption{Response times for the high variance case.}
@@ -340,17 +354,20 @@ experiment.
 \begin{figure*}[t]
   \centering
   \subfloat[Soft reservation.]{
-    \includegraphics[angle=270,scale=0.35]{eve-1}
+    \includegraphics[scale=0.33]{eve-1}
     \label{fig:soft-eve}
   }
   \subfloat[Hard reservation.]{
-    \includegraphics[angle=270,scale=0.35]{eve-2}
+    \includegraphics[scale=0.33]{eve-2}
     \label{fig:hard-eve}
   }
   \caption{Delay times for the movie trace.}
   \label{fig:eve}
 \end{figure*}
 
+
+\SubSection{Task set from the movie trace}
+\label{sec:task-set-from}
 
 In the delay time experiment, we ran both a soft reservation server
 and a hard reservation server on the task set shown in figure
