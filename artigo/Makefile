@@ -1,7 +1,7 @@
 
 NAME=hard-vs-soft
 OTHER+=$(GNUPLOT_PDF)
-OTHER+= figs/metricas.pdf
+OTHER+= $(SVG_PDF)
 
 USE_PDFLATEX=1
 VIEWPDF=evince
