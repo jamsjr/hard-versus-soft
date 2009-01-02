@@ -5,8 +5,10 @@
 \usepackage{amsthm}
 \usepackage{graphicx}
 \usepackage{url}
-\usepackage[utf8x]{inputenc}
-\usepackage[T1]{fontenc}
+%\usepackage[utf8x]{inputenc}
+%\usepackage[brazil]{babel} 
+%\usepackage[latin1]{inputenc}
+%\usepackage[T1]{fontenc}
 \usepackage{color}
 \usepackage{subfig}
 
@@ -30,9 +32,9 @@
 \newcommand{\simul}{\textbf{RTSimul}} % Que criatividade. Mudar esse
 % nome depois, urgente
 
-\author{Alexandre Passos, George Lima, José Augusto Matos Santos}
+\author{Alexandre Passos, George Lima, Jos\'e Augusto Matos Santos}
 %\address{Universidade Federal da Bahia}
-\title{Some issues with hard reservation for soft real-time systems}
+\title{On the Use of Hard and Soft Reservation Schemes in \\ Constant Bandwidth Servers}
 
 \begin{document}
 
@@ -61,92 +63,102 @@
 \Section{Introduction}
 \label{sec:introduction}
 
-In reservation-based scheduling of soft real-time tasks, each task is
-allowed at most a given fraction of the total processor time. There
-are two broad approaches to using said fraction: \textbf{hard} and
-\textbf{soft} reservation. In a hard reservation framework each server
-is allowed a given fraction of the total processing time, and in no
-ocasion can use more than that fraction. If in some circumstances, a
-pending task that has overrun its budget is allowed to use idle
-processing time, then the reservation is said to be soft\nota{colocar
-  referência da definição}. It is commonly acknowledged that a system
-based on hard reservation is more predictable, if not more efficient,
-than a system based on soft reservation. In this paper we present a
-simulation environment for becnhmarking both reservation mechanisms
-and experimental results in this environment that fail to show any
-significant benefit either in predictability or in performance.
+\textbf{Context}.  Real-time systems once structured as a set of
+simple periodic hard tasks \cite{liu.ea73:scheduling} have become
+reasonably complex. Nowadays such systems are often composed of hard
+and soft real-time tasks, which can be both periodic and non-periodic.
+Usual requirements of these modern real-time systems include not only
+predictability but also responsiveness and adaptiveness. In this
+context, reservation-based scheduling, RBS for short, has successfully
+been applied to support such requirements
+\cite{abeni.ea04:resource,mercer.ea94:processor,RJMO98,SSL89,SFLB03}.
 
-\SubSection{Related work}
-\label{sec:related-work}
+RBS techniques are usually implemented by scheduling servers. A server
+is in fact a virtual task responsible for scheduling application tasks
+assigned to it.  Each server $S_i$ can be defined by a processor
+reservation tuple, $(Q_i,T_i)$.  If a task (or group of tasks) $\tau$
+is assigned to a server $S_i$, $\tau$ has the right to use $Q_i$
+processor time within $T_i$ time units. Hence, servers can then be
+scheduled as if they were simple periodic tasks.
 
-In a paper on QoS management thourgh adaptive reservations
-\cite{abeni.ea05:qos}, Abeni et al use a hard reservation approach to
-help adaptivity. The need for such a restriction on the reservation
-will be studied \nota{colocar um experimento com hard e soft
-  corretamente dimensionados e variância maior/menor pra ver o que
-  acontece} later in this paper.
+On top of its conceptual simplicity, RBS has several interesting
+properties \cite{SFLB03}. From the scheduling viewpoint it is worthing
+mentioning that: (a) RBS is a means of ensuring temporal isolation
+since task execution can be controlled within its reservation envelop
+\cite{abeni.ea04:resource,mercer.ea94:processor,SSL89,spuri.ea96:scheduling};
+(b) it is possible to implement hierarchical scheduling when a group
+of tasks share the same server \cite{DB05,DB08}; (c) it can be used to
+improve flexibility, responsiveness and adaptiveness at the scheduler
+level.  Such characteristics has motivated a considerable number of
+research in the area
+\cite{abeni.ea99:adaptive,caccamo.ea00:capacity,caccamo.ea05:efficient,OCL08,OCL09,lin.ea05:improving}.
+Following this trend, in this paper we aim at better characterizing
+the performance of two reservation schemes commonly implemented in
+real-time systems.
 
-\SubSection{Contributions of this paper}
-\label{sec:contr-this-paper}
+\textbf{Focus}.  A reservation scheme can be hard if a server $S_i =
+(Q_i,T_i)$ cannot be scheduled for execution more than $Q_i$ time
+units within $T_i$ even if there is idle processor time available. In
+the opposite side, the soft scheme allows $S_i$ to execute beyond its
+reservation as long as system schedulability is not compromised. Often
+the decision of implementing one of these schemes arises. One of the
+widely known implementations of soft RBS scheme in EDF scheduled
+systems is the Constant Bandwidth Servers (CBS)
+\cite{abeni.ea04:resource}.  Due to the number of other scheduling
+mechanisms based on CBS
+\cite{abeni.ea05:qos,caccamo.ea00:capacity,caccamo.ea05:efficient,LB00},
+we chose it as a case study in this paper.
 
-The main contribution of this paper is putting into perspective the
-perceived characteristics of hard reservation. There is a lack in
-literature of experiments in a fair environment that measure
-objectively the possible benefits and costs of using hard and soft
-reservation in a given system.
+According to the CBS rules, a constant bandwidth $u_i = Q_i/T_i$ is
+allocated to each server $S_i = (Q_i,T_i)$, where $Q_i$ is called
+hereafter the maximum server budget. The budget of each server $S_i$
+is consumed as its jobs are executed. To guarantee that the server
+obeys its utilization limit, the deadline of $S_i$ is postponed by
+$T_i$ every time its budget is depleted.  Its full budget $Q_i$ is
+also restored when its deadline is updated.  Deadline postponements
+make it possible to implement the soft reservation scheme but brings
+about a potential side effect: an overloaded server may have its
+deadline postponed too often making its relative priority too low.
+This problem may be avoided by implementing a hard reservation version
+of CBS \cite{buttazzo05:soft}.  Nonetheless, it is still to be checked
+each CBS version, soft or hard, performs better.
 
-\Section{Analytical characteristics}
-\label{sec:analyt-char}
+\textbf{Related work}. There have been extensive research on comparing
+RBS techniques.  Some of them have been on fixed-priority scheduling
+\cite{BB99,BB02,DB05,DW95}.  In the field of dynamic scheduling, CBS
+has been compared to several other approaches
+\cite{spuri.ea96:scheduling}.  Techniques to reclaiming spare capacity
+of CBS has also been reported, bringing in comparative studies on
+their performance \cite{caccamo.ea00:capacity,lin.ea05:improving}. To
+the best of our knowledge these comparative studies have considered
+only the soft version of CBS, though.  The work by Rajkumar et
+al. \cite{rajkumar.ea01:resource} illustrates the use of hard and soft
+versions of a fixed-priority RBS using a very simple task set.
 
-In \cite{buttazzo05:soft}, hard reservation is introduced as a way of
-proving schedulability of a given task set using a CBS server with a
-hard reservation rule. It is done o by means of the following theorems:
+\textbf{Contributions}. We report a comprehensive comparative study on
+the performance of CBS. The reported evaluation puts into perspective
+the perceived characteristics of its hard and soft reservation
+schemes.  By benchmarking these two CBS versions in a simulation
+environment, they are systematically compared against each other.
+Since the use of CBS has extensively been reported and one usually
+chooses one of these two versions
+(e.g. \cite{abeni.ea99:adaptive,abeni.ea05:qos}), the results reported
+here can better subsidize their implementation decisions.  The
+reported study was carried out making use of a real-time scheduling
+simulator, implemented in Pyton \cite{PRSIM}. Although there are other
+simulation tools \cite{simTools}, we chose to... \nota{justificar a
+  implementacao de um novo simulador}.
 
-\begin{theorem}
-  Given a CBS server with the hard reservation rule, and with
-  parameters $(Q,P)$, if $k =
-  \left\lceil\frac{t-(P-Q)}{P}\right\rceil$, the partition with the
-  maximum delay that it can generate has the following least supply
-  function $S^*(t)$:
-  \[ S^*(t) = \left\{ \begin{array}{ll}
-      0 & \text{if}\ t \in [0,P-Q] \\
-      (k-1)Q & \text{if}\ t \in (kP - Q, (k+1)P-2Q) \\
-      t-(k+1)(P-Q) & \text{otherwise.}
-    \end{array}\right.
-  \]
-\end{theorem}
+\textbf{Structure}. Section \ref{sec:simul-envir} describes the system
+model and the simulation environment.  In order to give a wide picture
+of the simulated scheduling mechanisms, we conducted the evaluation
+taken into consideration several metrics and different simulation
+scenarios, which are presented in Section \ref{sec:metrics}. Results
+from the simulation are discussed in Section
+\ref{sec:simulation-results} while in Section \ref{sec:conclusion} our
+final comments are given.
 
-\begin{theorem}
-  Let $A$ be set of periodic or sporadic tasks
-  $\{\tau_1,\ldots,\tau_n\}$, with $\tau_i = (C_i,T_i,D_i)$, where
-  $C_i$ is the worst-case computation time, $T_i$ is the task period
-  and $D_i$ is the relative deadline. This task set is schedulable by
-  EDF scheduling algorithm on a resource partition with least supply
-  function $S^*(t)$ if and only if:
-  \[
-  \forall 0 < t \leq 2H : dbf(t) \leq S^*(t)
-  \]
-  where $H = lcm(T_1,\ldots,T_n)$ is the hyperperiod of A and $dbf(t)$
-  is the processor demand bound function, defined as
-  \[
-  dbf(t) = \sum_{i=1}^n
-  \left(\left\lfloor\frac{t-D_i}{T_i}\right\rfloor + 1\right)C_i.
-  \]
-\end{theorem}
-
-For a proof of these results, see \cite{buttazzo05:soft}.
-
-Interestingly, these theorems can be extended to a soft reservation
-framework. Intuitively, if a given task set is schedulable on a hard
-cbs server, it means that if the server budget ever runs out when
-executing a task from that task set, the task still has time to finish
-before its deadline. Since the total computation time available for a
-given server deadline is the same under both soft and hard reservation
-and no tasks from the original task set are discarded, any task set
-schedulable with the hard reservation rule is schedulable with the
-soft reservation rule. \nota{formalizar essa prova}
-
-\Section{Simulation environment}
+\Section{Simulation Environment}
 \label{sec:simul-envir}
 
 To perform the experiments presented in this paper we implemented
@@ -207,7 +219,7 @@ Not all these variables highlight any difference in whether hard or
 soft reservation is better, and by how much. To study the actual
 effects of a reservation model, we chose some performance metrics to study.
 
-\SubSection{Performance Metrics}
+\Section{Evaluation Metrics}
 \label{sec:metrics}
 
 \begin{enumerate}
@@ -280,7 +292,7 @@ effects of a reservation model, we chose some performance metrics to study.
 \end{figure*}
 
 
-\Section{Simulation results}
+\Section{Simulation Results}
 \label{sec:simulation-results}
 
 We found that not discarding expired tasks makes soft and hard
@@ -403,3 +415,55 @@ out-of-phase tasks, have been observed.
 \bibliographystyle{latex8}
 \bibliography{bib}
 \end{document}
+
+\Section{Analytical characteristics}
+\label{sec:analyt-char}
+
+In \cite{buttazzo05:soft}, hard reservation is introduced as a way of
+proving schedulability of a given task set using a CBS server with a
+hard reservation rule. It is done o by means of the following theorems:
+
+\begin{theorem}
+  Given a CBS server with the hard reservation rule, and with
+  parameters $(Q,P)$, if $k =
+  \left\lceil\frac{t-(P-Q)}{P}\right\rceil$, the partition with the
+  maximum delay that it can generate has the following least supply
+  function $S^*(t)$:
+  \[ S^*(t) = \left\{ \begin{array}{ll}
+      0 & \text{if}\ t \in [0,P-Q] \\
+      (k-1)Q & \text{if}\ t \in (kP - Q, (k+1)P-2Q) \\
+      t-(k+1)(P-Q) & \text{otherwise.}
+    \end{array}\right.
+  \]
+\end{theorem}
+
+\begin{theorem}
+  Let $A$ be set of periodic or sporadic tasks
+  $\{\tau_1,\ldots,\tau_n\}$, with $\tau_i = (C_i,T_i,D_i)$, where
+  $C_i$ is the worst-case computation time, $T_i$ is the task period
+  and $D_i$ is the relative deadline. This task set is schedulable by
+  EDF scheduling algorithm on a resource partition with least supply
+  function $S^*(t)$ if and only if:
+  \[
+  \forall 0 < t \leq 2H : dbf(t) \leq S^*(t)
+  \]
+  where $H = lcm(T_1,\ldots,T_n)$ is the hyperperiod of A and $dbf(t)$
+  is the processor demand bound function, defined as
+  \[
+  dbf(t) = \sum_{i=1}^n
+  \left(\left\lfloor\frac{t-D_i}{T_i}\right\rfloor + 1\right)C_i.
+  \]
+\end{theorem}
+
+For a proof of these results, see \cite{buttazzo05:soft}.
+
+Interestingly, these theorems can be extended to a soft reservation
+framework. Intuitively, if a given task set is schedulable on a hard
+cbs server, it means that if the server budget ever runs out when
+executing a task from that task set, the task still has time to finish
+before its deadline. Since the total computation time available for a
+given server deadline is the same under both soft and hard reservation
+and no tasks from the original task set are discarded, any task set
+schedulable with the hard reservation rule is schedulable with the
+soft reservation rule. \nota{formalizar essa prova}
+
