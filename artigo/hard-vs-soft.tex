@@ -219,45 +219,34 @@ possibilities we chose a few metrics we found important.
 \Section{Evaluation Metrics}
 \label{sec:metrics}
 
-\begin{enumerate}
-\item \textbf{Response time}: in a soft real-time system the most
-  important concern is maintaining a good \textbf{response time}
-  without wasting system resources or prejudicating any hard real-time
-  tasks present in the system \cite{buttazzo05:soft}. This suggests
-  that a good way to measure performance in soft real-time systems is
-  measuring the response time of the tasks tasks in it.
-\item \textbf{Response interval}: on the other hand, measuring just
-  the response time of completed tasks is rather naïve, since there
-  are many undesirable trade-offs one might make that reduce the mean
-  response time for tasks and yet make a system worse performing. A
-  simple example is that whenever tasks missing their deadlines are
-  discarded one can always reduce mean response time by discarding all
-  tasks with a sufficiently high cost. However, this clearly degrades
-  the overall system performance. For this reason we're interested
-  also in the \textbf{response interval}, which is the interval
-  between two successive completions of a task. If no deadlines are
-  missed the mean response interval should be near the period of the
-  tasks, but whenever tasks are discarded it should go up. We propose
-  that in this situation the mean response interval characterizes the
-  the perceived performance of a system better than the mean response
-  time.
-\item \textbf{Delay time}: one supposed difference between soft and
-  hard reservation in CBS servers is that, when using soft
-  reservation, the server might postpone its deadline indefinitely
-  during a time interval of high load, making for a very low
-  responsiveness afterwards. To measure whether or not this is really
-  a problem we are also measuring the mean \textbf{delay} between a
-  task's arrival time and the time it starts executing. Also, to
-  highlight any perceived problems of soft reservation under this
-  condition we use the costs seen in figure
-  \ref{fig:plot-trace-trifasico}.
-\item \textbf{Deadline miss ratio}: when discarding unfinished tasks,
-  a high \textbf{deadline miss ratio} means the system is getting less
-  and less useful. One changing scheduling policies, it is always good
-  to be sure this value is not getting out of control.
-\end{enumerate}
+The most important concern in designing a soft real-time system is
+maintaining the best possible \textbf{response time} without wasting
+system resources or harming any hard real-time tasks present in the
+system \cite{buttazzo05:soft}. This suggests that a good way to
+measure the performance of soft real-time systems is measuring the
+response time of the tasks in it. The response time of a job $j$ is
+defined as $w_j + s_j$, where $w_j$, job $j$'s waiting time, is the
+time job $j$ waits in a queue and $s_j$ is the time actually spent
+serving job $j$.
 
-These metrics are exemplified in figure \ref{fig:metrics}.
+One supposed difference between soft and hard reservation in CBS
+servers is that, when using soft reservation, the server might
+postpone its deadline indefinitely during a time interval of high
+load, making for a very low responsiveness afterwards. To measure
+whether or not this is really a problem we are also measuring the mean
+\textbf{waiting time} between a task's arrival time and the time it
+starts executing. Also, to highlight any perceived problems of soft
+reservation under this condition we use the costs seen in figure
+\ref{fig:plot-trace-trifasico}. Figure \ref{fig:metrics} exemplifies
+response time and waiting time.
+
+Another important concern in a soft real-time system is serving as
+many jobs as possible. Therefore, keeping a small \textbf{deadline
+  miss ratio} is important. One changing scheduling policies, it is
+always good to be sure this value is not getting out of control. The
+deadline miss ratio $dmr_i$ of a server $S_i$ is $\frac{l_i}{t_i}$,
+where $l_i$ is the number of jobs that lost their deadlines and $t_i$
+is the total number of jobs scheduled for that server.
 
 \begin{figure}[t]
   \centering
@@ -427,7 +416,7 @@ shows the response times for this experiment.
     \includegraphics[scale=0.33]{eve-2}
     \label{fig:hard-eve}
   }
-  \caption{Delay times for the movie trace.}
+  \caption{Wait times for the movie trace.}
   \label{fig:eve}
 \end{figure*}
 
@@ -439,7 +428,7 @@ reservation server on the task set shown in figure
 movie. Both servers had their periods set to the mean period of the
 data set and their capacities were the mean costs. In the background a
 hard real-time task runs consuming the remaining processor
-bandwidth. As can be easily seen in figure \ref{fig:eve}, the delay
+bandwidth. As can be easily seen in figure \ref{fig:eve}, the wait
 time for the hard reservation server is always higher than for the
 soft reservation server. Also, the soft reservation server only lost
 0.1\% of the dealines, while the hard reservation server lost
@@ -457,9 +446,9 @@ capacity replenishment before continuing execution.
 As can be seen in figures \ref{fig:trifasico}, \ref{fig:variance}, and
 \ref{fig:eve}, soft reservation usually outperforms hard reservation,
 having a smaller average response time as well as a smaller worst-case
-response time, a shorter delay between task arrival and start of
-execution, and a more uniform interval between successive task
-terminations and misses less deadlined. 
+response time, a shorter waiting time between task arrival and start
+of execution, and a more uniform interval between successive task
+terminations and misses less deadlined.
 
 \bibliographystyle{latex8}
 \bibliography{bib}
