@@ -191,7 +191,7 @@ def run_plots(servs, conf):
       if len(h):
         print h.name
         name = base_name+mon+"-histo.data"
-        Histo = h.histogram(low=0.,high=max(a[1] for a in h),nbins=400)
+        m = h.histogram(low=0.,high=1,nbins=400)
         save_data_file(name, m)
         histo_string += (", \"%s\" using 1:2 title \"%s\" with impulses" % 
                          (name, name))

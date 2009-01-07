@@ -159,10 +159,10 @@ ourselves allowed us to easily tune it to our specific requirements.
 Section \ref{sec:simul-envir} describes the system model and the
 simulation environment.  In order to give a wide picture of the
 simulated scheduling mechanisms, we conducted the evaluation taken
-into consideration several metrics and different simulation scenarios,
-which are presented in Section \ref{sec:metrics}. Results from the
-simulation are discussed in Section \ref{sec:simulation-results} while
-in Section \ref{sec:conclusion} our final comments are given.
+into consideration several metrics and different simulation
+scenarios. Results from the simulation are discussed in Section
+\ref{sec:simulation-results} while in Section \ref{sec:conclusion} our
+final comments are given.
 
 \Section{Simulation Environment}
 \label{sec:simul-envir}
@@ -229,54 +229,8 @@ Considering all combination of these four parameters leads to 16
 distinct configurations. In several of them the behaviors of both
 reservation schemes were found to be equivalent.  We will present here
 only the results for those which showed difference in performance.
-Before this, we present the metrics used to compare the reservation
-schemes.
-
-\SubSection{Evaluation Metrics}
-\label{sec:metrics}
-
-\nota{Praticamente nao toquei nesta secao. Nao entendi porque a figura
-  1 nao foi descrita e porque as metricas que discutimos em sala nao
-  correspondem ao que eh apresentado aqui. Qual a importancia de
-  waiting time para a aplicacao? Precisa explicar, pois se espera que
-  isso jah estah sendo contemplado em respopose time? E sobre response
-  interval? Nao entra mais como uma metrica?}
-
-An important concern in designing a soft real-time system is
-minimizing the \textbf{response time} without wasting system resources
-or harming any hard real-time tasks present in the system
-\cite{buttazzo05:soft}. This suggests that a good way to measure the
-performance of soft real-time systems is measuring the response time
-of the tasks in it. The response time of a job $j$ is defined as $w_j
-+ s_j$, where $w_j$, job $j$'s waiting time, is the time job $j$ waits
-in a queue and $s_j$ is the time actually spent serving job $j$.
-
-One supposed difference between soft and hard reservation in CBS
-servers is that, when using soft reservation, the server might
-postpone its deadline indefinitely during a time interval of high
-load, making for a very low responsiveness afterwards. To measure
-whether or not this is really a problem we are also measuring the mean
-\textbf{waiting time} between a task's arrival time and the time it
-starts executing. Also, to highlight any perceived problems of soft
-reservation under this condition we use the costs seen in figure
-\ref{fig:plot-trace-trifasico}. Figure \ref{fig:metrics} exemplifies
-response time and waiting time.
-
-Another important concern in a soft real-time system is serving as
-many jobs as possible. Therefore, keeping a small \textbf{deadline
-  miss ratio} is important. One changing scheduling policies, it is
-always good to be sure this value is not getting out of control. The
-deadline miss ratio $dmr_i$ of a server $S_i$ is $\frac{l_i}{t_i}$,
-where $l_i$ is the number of jobs that lost their deadlines and $t_i$
-is the total number of jobs scheduled for that server.
-
-\begin{figure}[t]
-  \centering
-  \includegraphics[scale=0.5]{metricas}
-  \caption{Performance metrics}
-  \label{fig:metrics}
-\end{figure}
-
+The metrics we use to measure these differences in performance are
+response time, wait time and deadline miss ratio.
 
 \Section{Simulation Results}
 \label{sec:simulation-results}
@@ -284,7 +238,7 @@ is the total number of jobs scheduled for that server.
 As mentioned in mentioned in section \ref{sec:configurations}, not all
 configurations led to a performance difference. Section
 \ref{sec:noDifference} presents some comments on the reasons for this
-behavior.  Then, sections \ref{sec:xx}-\ref{sec:yy} describe the
+behavior.  Then, section \ref{sec:indiv-simul-results} describes the
 results that highlight any differences in performance between the hard
 and soft reservation schemes.
 
@@ -341,28 +295,28 @@ are given below.
   with a real-life data set.
 \end{description}
 
-\begin{figure}[t]
+\begin{figure}[h!t]
   \centering
-  \includegraphics[scale=0.33]{trace-norma}
+  \includegraphics[scale=0.33]{trace-normal}
   \caption{Execution cost distribution for the scenario L1.}
   \label{fig:plotl1}
 \end{figure}
 
-\begin{figure}[t]
+\begin{figure}[h!t]
   \centering
   \includegraphics[scale=0.33]{trace-trifasico}
   \caption{Execution cost distribution for the scenario L2.}
   \label{fig:plotl2}
 \end{figure}
 
-\begin{figure}[t]
+\begin{figure}[h!t]
   \centering
   \includegraphics[scale=0.33]{trace-variance}
   \caption{Execution cost distribution for the scenario L3.}
   \label{fig:plotl3}
 \end{figure}
 
-\begin{figure}[t]
+\begin{figure}[h!t]
   \centering
   \includegraphics[scale=0.33]{trace-eve}
   \caption{Execution cost distribution for scenario L4.}
@@ -425,29 +379,57 @@ capacity, the will be usually no budget exhaustion.\nota{george: Nao
   melhor esta explicacao. Eu acrescentei algo a frase, mas ainda
   assim, continua sem sentido. alexandre: está melhor?}
 
-
-\SubSection{Response time}
-\label{sec:respTime}
-
-Comparing the response time of jobs when for loads L1-L4, we observe
-that \nota{apresentar os dados relativos a tempo de resposta.
-  Acredito que deve existir muitos graficos. Ex. L1-L4 x
-  configuracoes. Se este for o caso, selecionar os mais relevantes,
-  justificar a selecao, e apresentar os resultados.}
-
-\SubSection{Waiting time}
-\label{sec:waitingTime}
-
-\nota{o mesmo para waiting time}
-
-
-\SubSection{Deadline miss ratio}
-\label{sec:DMR}
-
-\nota{o mesmo para esta metrica}
-
 \SubSection{Individual simulation results}
 \label{sec:indiv-simul-results}
+
+Exploring all possible situations that might highlight any differences
+between soft and hard reservation is unpractical, so we chose a few
+representative cases, already described in section
+\ref{sec:configurations} as L1, L2, L3 and L4. Configuration L1
+supposedly highlights how the servers are expected to behave under
+reasonable conditions. L2 is designed to see how the servers adapt to
+varying costs, and L3 varying variance. L4, on the other hand, is a
+real-life example, that reproduces behavior observed under the other
+configurations, as expected.
+
+\begin{figure*}[t]
+  \centering
+  \subfloat[Soft reservation.]{
+    \includegraphics[scale=0.33]{rthisto1}
+    \label{fig:soft-rth}
+  }
+  \subfloat[Hard reservation.]{
+    \includegraphics[scale=0.33]{rthisto2}
+    \label{fig:hard-rth}
+  }
+  \caption{Response time histograms for scenario L1.}
+  \label{fig:rth}
+\end{figure*}
+
+\begin{figure*}[t]
+  \centering
+  \subfloat[Soft reservation.]{
+    \includegraphics[scale=0.33]{dthisto1}
+    \label{fig:soft-dth}
+  }
+  \subfloat[Hard reservation.]{
+    \includegraphics[scale=0.33]{dthisto2}
+    \label{fig:hard-dth}
+  }
+  \caption{Wait time histograms for scenario L1.}
+  \label{fig:dth}
+\end{figure*}
+
+For a general idea of how soft and hard reservation behave we have
+used the costs in scenario L1. Figures \ref{fig:soft-rth} and
+\ref{fig:hard-rth} show histograms of response time and waiting time
+for soft and hard reservation on a system running tasks from scenario
+L1. In this scenario, the soft reservation server lost 5.4\% of the
+deadlines and the hard reservation server lost 59.8\%. As can be seen,
+both histogram for the soft reservation server have higher peaks on
+smaller response and wait times than their hard reservation
+equivalents. As the soft reservation server misses less deadlines, it
+is clearly a better way of employing system resources, in this case.
 
 \begin{figure*}[t]
   \centering
@@ -459,8 +441,7 @@ that \nota{apresentar os dados relativos a tempo de resposta.
     \includegraphics[scale=0.33]{trifasico-2}
     \label{fig:hard-trifasico}
   }
-  \caption{Response times for the costs in figure
-    \ref{fig:plot-trace-trifasico}.}
+  \caption{Response times for scenario L2.}
   \label{fig:trifasico}
 \end{figure*}
 
@@ -542,6 +523,9 @@ execution.
 
 \Section{Conclusion}
 \label{sec:conclusion}
+
+A consistently higher deadline miss ratio alone should be a warning to
+users of hard reservation servers.
 
 As can be seen in figures \ref{fig:trifasico}, \ref{fig:variance}, and
 \ref{fig:eve}, soft reservation usually outperforms hard reservation,
