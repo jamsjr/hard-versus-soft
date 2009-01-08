@@ -217,12 +217,22 @@ In order to simulate several application semantics, we consider four simulation 
   tasks it is serving.
 \end{description}
 
+The metrics we used to evaluate the performance of the servers are
+response time, wait time and deadline miss ratio. For a given job that
+completes, its response time is the time interval between the time it
+arrived and the time it completed executing. It makes no sense to
+speak of the response time of a job that was discarded before
+completing (for example, by missing its deadline). A job's wait time
+is defined as the time interval between its arrival time and the time
+it started executing. For a server, its deadline miss ratio is the
+fraction $l/t$, where $l$ is the number of jobs that lost their
+deadlines and $t$ is the total number of jobs scheduled for that
+server.
+
 Considering all combination of these four parameters leads to 16
 distinct configurations. In several of them the behaviors of both
 reservation schemes were found to be equivalent.  We will present here
 only the results for those which showed difference in performance.
-The metrics we use to measure these differences in performance are
-response time, wait time and deadline miss ratio.
 
 \Section{Simulation Results}
 \label{sec:simulation-results}
@@ -396,6 +406,9 @@ results.
   \label{tab:summary}
 \end{table*}
 
+\subsubsection{Scenario L1}
+\label{sec:scenario-l1}
+
 \begin{figure*}[t]
   \centering
   \subfloat[Soft reservation.]{
@@ -452,6 +465,9 @@ system resources, in this case.
   \label{fig:trifasico}
 \end{figure*}
 
+\subsubsection{Scenario L2}
+\label{sec:scenario-l2}
+
 The effect of markedly different execution costs over time is also
 interesting. In this experiment, the task set first starts with a
 correctly dimensioned server, until a certain point in time in which
@@ -483,6 +499,9 @@ adaptation mechanism, such as the one described in
   \label{fig:variance}
 \end{figure*}
 
+\subsubsection{Scenario L3}
+\label{sec:scenario-l3}
+
 Another possible situation in which a RBS might have its responsivity
 compromised is when dealing with tasks having a high variance in its
 execution costs. Scenario L3 was designed to test this
@@ -511,6 +530,9 @@ server, thus behaving better on task sets with a high variance.
   \caption{Wait times for scenario L4, the movie trace.}
   \label{fig:eve}
 \end{figure*}
+
+\subsubsection{Scenario L4}
+\label{sec:scenario-l4}
 
 Another very important test case is whether, in non-synthetic tasks,
 the performance characteristics we observed are reproduced. In this
