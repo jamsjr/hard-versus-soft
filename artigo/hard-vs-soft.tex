@@ -29,7 +29,7 @@
 \newcommand{\simul}{\textbf{RTSimul}} % Que criatividade. Mudar esse
 % nome depois, urgente
 
-\author{Alexandre Passos, George Lima, Jos\'e Augusto Matos Santos}
+\author{Alexandre Passos, George Lima, Jos\'e Augusto M. Santos Jr.}
 %\address{Universidade Federal da Bahia}
 \title{On the Use of Hard and Soft Reservation Schemes in \\ Constant Bandwidth Servers}
 
@@ -174,7 +174,7 @@ The CBS server, as described in \cite{abeni.ea98:integrating}, is
 defined uniquely by a tuple $(Q,T)$, where the server is allowed to
 run for $Q$ time units over a period of $T$ time units. Whenever a job
 $j$ arrives at the server, it is enqueued in the server queue. The
-server also maintais internally a tuple $(c,d)$, where $c$ is its
+server also maintains internally a tuple $(c,d)$, where $c$ is its
 current budget and $d$ is its current deadline. For each time unit a
 task spends running, the value of $c$ is decreased. The CBS server is
 scheduled as a normal task with deadline $d$ running on an EDF
@@ -184,7 +184,7 @@ is:
 \item Whenever the server is scheduling a new job for execution, it
   tests whether $r + (c/Q)T \geq d$. If this is true, then the current
   deadline $d$ is set to $r+T$ and the capacity is set to
-  $C$. Otherwise, the deadline $d$ and the capacity $c$ are unchanged.
+  $Q$. Otherwise, the deadline $d$ and the capacity $c$ are unchanged.
 \item When the capacity $c$ becomes $0$, two things may be done:
   \begin{enumerate}
   \item if the server is a soft CBS, the deadline $d$ is set to $d+T$
@@ -234,7 +234,7 @@ set-up were considered.
 \SubSection{Simulation Configurations}
 \label{sec:configurations}
 
-In order to desing our simulation to cover several different
+In order to design our simulation to cover several different
 application semantics, we consider four basic load simulation
 parameters:
 \begin{description}
@@ -359,7 +359,7 @@ between the hard and soft reservation schemes.
 \label{sec:noDifference}
 
 In configurations where expired tasks are not discarded, the system is
-constantly overloadedloaded or the server is underloaded both
+constantly overloaded or the server is underloaded both
 reservation schemes performed equivalently. The explanation for this
 behavior is given below.
 
@@ -372,7 +372,7 @@ discarded, both hard and soft reservation servers will finish in at
 least $\lfloor C/Q \rfloor T$ time units.  The only possible
 difference is that a soft reservation server might spend this budget
 before a hard reservation server can. In that case, the soft
-reservation server may suffer some deadline postponments, but can
+reservation server may suffer some deadline postponements, but can
 never finish executing a given job after an equivalent hard
 reservation server. Hence, in general, not discarding expired tasks
 makes soft and hard reservation completely equivalent.
@@ -384,7 +384,7 @@ When the system is always perfectly dimensioned or overloaded (there
 is no system idle time) both reservation schemes are equivalent. This
 is so because the soft server can only postpone its deadline to get
 extra budget when there is free system time. Even if a soft
-reservation server does exaust its budget before its deadline, a
+reservation server does exhaust its budget before its deadline, a
 system under high load will usually have other higher-priority tasks
 running and hence stopping the soft reservation server from using its
 extra budget until the time gets closer to the server deadline (and by
@@ -465,7 +465,7 @@ A general idea of how soft and hard reservation can behave might be
 given by a simulation with the costs in scenario L1. Since the
 distribution of the execution costs is normal and constant throughout
 the simulation, the distribution of response and wait times is better
-characterized by a histogram· Figures \ref{fig:rth} and \ref{fig:dth}
+characterized by a histogram. Figures \ref{fig:rth} and \ref{fig:dth}
 show histograms of response time and waiting time for soft and hard
 reservation on a system running tasks from scenario L1. The horizontal
 axis represents each possible value, in time units, for the response
@@ -549,7 +549,7 @@ performant in the remaining time. In this experiment the hard
 reservation server missed 59.39\% of the deadlines, while the soft
 reservation only missed 5.19\%. Figure \ref{fig:variance} shows the
 response times for this experiment. The wait times behaved similarly
-and were ommitted from this paper. As can be easily seen, in the
+and were omitted from this paper. As can be easily seen, in the
 higher variance part the soft reservation server manages to finish
 many more tasks in a short amount of time than the hard reservation
 server, thus behaving better on task sets with a high variance.
@@ -581,7 +581,7 @@ server is always higher than for the soft reservation server,
 sometimes high enough that the task has already missed its deadline by
 the time it starts executing. This might account for the fact that, as
 can be seen in Table \ref{tab:summary}, the soft reservation server
-only missed 0.1\% of the dealines, while the hard reservation server
+only missed 0.1\% of the deadlines, while the hard reservation server
 missed 24.54\%. This result seems, at first, counter-intuitive, since
 the soft reservation server, by delaying its deadline whenever the
 execution costs are too high, can have an arbitrarily low priority. On
@@ -604,8 +604,8 @@ reservation schemes present equivalent performance for several
 configurations, but, using simple but illustrative load scenarios, we
 have shown that soft reservation schemes outperforms the hard one by
 having shorter response times, substantially shorter wait times and
-significantly smaller deadline miss ratios. This results sugests that
-soft reservation servers iare better able to use system resources
+significantly smaller deadline miss ratios. This results suggests that
+soft reservation servers are better able to use system resources
 without either compromising overall system schedulability or task
 quality of service. We believe that the results and scenarios
 presented here can be used by people designing reservation-based
