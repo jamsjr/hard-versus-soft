@@ -41,28 +41,38 @@
 
 \begin{abstract}
 
-  Recently, reservation-based scheduling is becoming more and more
-  used in real-time operating systems. A reservation-based scheduler
-  works by having separate schedulers, called servers, running as
-  processes on the main scheduler, each server having a fraction of
-  the total processor time reserved for it. There are many ways of
-  using this fraction of the total bandwidth, but broadly a
-  reservation scheme is \textbf{hard} if it cannot use more than its
-  allocated fraction in any interval of time, and \textbf{soft}
-  otherwise. In this paper we present the first comprehensive
-  comparison of the performance of soft and hard reservation schemes
-  for the CBS algorithm. We find that in some scenarios soft and hard
-  reservation are equivalent, but in many common representative loads
-  soft reservation significantly outperforms hard reservation, having
-  a substantially smaller wait time and missing significantly less
-  deadlines.
+Elaborated scheduling mechanisms have been developed to cope with complex real-time systems. In this context,
+reservation-based scheduling has successfully been used as a suitable technique. In particular,
+the Constant Bandwidth Server (CBS) is one of these techniques which has received special attention recently.
+In this paper we evaluate by extensive simulation two CBS versions, corresponding to its hard and soft reservation schemes.
+The latter makes use of background processor time but to do so it may decrease the server priority too much. 
+While the former circumvents this problem, it follows stricter reservation rules.
+Results obtained from our simulation indicate that both schemes performs equivalently in some scenarios while in several others 
+the soft version significantly outperforms the hard one. Such results are relevant for system designers who can better subsidize
+their implementation decisions.
+
+%  Recently, reservation-based scheduling is becoming more and more
+%  used in real-time operating systems. A reservation-based scheduler
+%  works by having separate schedulers, called servers, running as
+%  processes on the main scheduler, each server having a fraction of
+%  the total processor time reserved for it. There are many ways of
+%  using this fraction of the total bandwidth, but broadly a
+%  reservation scheme is \textbf{hard} if it cannot use more than its
+%  allocated fraction in any interval of time, and \textbf{soft}
+%  otherwise. In this paper we present the first comprehensive
+%  comparison of the performance of soft and hard reservation schemes
+%%  for the CBS algorithm. We find that in some scenarios soft and hard
+%  reservation are equivalent, but in many common representative loads
+%  soft reservation significantly outperforms hard reservation, having
+%  a substantially smaller wait time and missing significantly less
+%  deadlines.
   
 \end{abstract}
 
 \Section{Introduction}
 \label{sec:introduction}
 
-\textbf{Context}.  Real-time systems once structured as a set of
+Real-time systems once structured as a set of
 simple periodic hard tasks \cite{liu.ea73:scheduling} have become more
 complex. Nowadays such systems are often composed of hard and soft
 real-time tasks, both of which can be either periodic or non-periodic.
@@ -97,8 +107,8 @@ research in the area
 In this paper we aim at better characterizing the performance of two
 reservation schemes commonly implemented in real-time systems.
 
-\textbf{Focus}.  A reservation scheme is \textbf{hard} if a server
-$S = (Q,T)$ cannot be scheduled run for more than $Q$ time
+A reservation scheme is \textbf{hard} if a server
+$S = (Q,T)$ cannot be scheduled to run for more than $Q$ time
 units within any time interval of $T$ units even if there is idle
 processor time available. On the other hand, a \textbf{soft} scheme
 allows $S$ to execute beyond its reservation as long as system
@@ -126,7 +136,9 @@ to recharge the server budget. In order to support implementation
 decisions regarding hard and soft reservation schemes comparative
 studies are still needed.
 
-\textbf{Related work}. There is extensive research on comparing RBS
+\SubSection{Related work}
+
+There is extensive research on comparing RBS
 techniques.  Some of them are based on fixed-priority scheduling
 \cite{bernat.ea99:new,bernat.ea02:multiple,davis.ea05:hierarchical,davis.ea95:dual}.
 In the field of dynamic scheduling, CBS has been compared to several
@@ -160,6 +172,9 @@ requirements.
 \SubSection{Structure of this paper}
 \label{sec:structure-this-paper}
 
+A more precise definition of the CBS versions considered in this
+paper is given in section \ref{sec:soft-hard-cbs}. Some comments on the motivation for 
+this study is also presented in this section.  
 Section \ref{sec:simul-envir} describes the system model and the
 simulation environment.  In order to give a wide picture of the
 simulated scheduling mechanisms, we conducted the evaluation taking
@@ -170,13 +185,13 @@ in Section \ref{sec:conclusion} our final comments are given.
 \Section{Soft and Hard CBS}
 \label{sec:soft-hard-cbs}
 
-The CBS server, as described in \cite{abeni.ea98:integrating}, is
-defined uniquely by a tuple $(Q,T)$, where the server is allowed to
+A CBS \cite{abeni.ea98:integrating} is
+defined by a tuple $(Q,T)$ and by a set of rules. The server is allowed to
 run for $Q$ time units over a period of $T$ time units. Whenever a job
 $j$ arrives at the server, it is enqueued in the server queue. The
 server also maintains internally a tuple $(c,d)$, where $c$ is its
 current budget and $d$ is its current deadline. For each time unit a
-task spends running, the value of $c$ is decreased. The CBS server is
+task spends running, the value of $c$ is decreased. The CBS is
 scheduled as a normal task with deadline $d$ running on an EDF
 scheduler. The release time of a job is named $r$. The CBS algorithm
 is:
@@ -185,18 +200,23 @@ is:
   tests whether $r + (c/Q)T \geq d$. If this is true, then the current
   deadline $d$ is set to $r+T$ and the capacity is set to
   $Q$. Otherwise, the deadline $d$ and the capacity $c$ are unchanged.
-\item When the capacity $c$ becomes $0$, two things may be done:
+\item When the capacity $c$ becomes $0$, two rules may be applied depending on the CBS version:
   \begin{enumerate}
-  \item if the server is a soft CBS, the deadline $d$ is set to $d+T$
+  \item Soft CBS. The deadline $d$ is set to $d+T$
     and the capacity $c$ is set to $Q$;
-  \item otherwise, the server waits until time $d$ and then sets the
+  \item Hard CBS. The server waits until time $d$ and then sets the
     deadline $d$ to $d+T$ and the capacity $c$ to $Q$.
   \end{enumerate}
 \end{enumerate}
 
-It is good to note that the using soft CBS rule does not compromise
-system schedulability \cite{abeni.ea98:integrating}.
-
+It is interesting to observe that the soft CBS trades availability for priority.
+Indeed, according to the soft version, a server is always ready since its budget is never kept null. 
+Nonetheless, the sever may have its deadline postponed too much in periods 
+where it is overloaded. If this occurs, the server may run in background for some time. 
+On the contrary, the hard CBS does not suffer from this effect but may be kept suspended for some time.
+The characterization of these versions with respect to their effects on applications will be reported in the 
+following sections.
+ 
 \Section{Simulation Environment}
 \label{sec:simul-envir}
 
@@ -207,9 +227,8 @@ instructions to reproduce our results are available in
 \url{http://github.com/jamsjr/hard-versus-soft/tree/master}. \simul{}
 implements a basic EDF scheduler and, on top of it, runs both hard
 real-time periodic tasks and bandwidth sharing servers. These servers
-can be either traditional CBS servers \cite{abeni.ea98:integrating} or
-a hard reservation adaptation of the CBS algorithm, as described in
-\cite{buttazzo05:soft}. Soft real-time tasks running on these servers
+can be either hard \cite{buttazzo05:soft} or soft CBS \cite{abeni.ea98:integrating}, previously
+described. Soft real-time tasks running on these servers
 either have their execution times sampled from a probability
 distribution or follow traces generated from a modified version of
 mplayer that reports the start time and decoding cost for each frame
@@ -235,7 +254,7 @@ set-up were considered.
 \label{sec:configurations}
 
 In order to design our simulation to cover several different
-application semantics, we consider four basic load simulation
+application semantics, we have considered four basic load simulation
 parameters:
 \begin{description}
 \item Discard/not discard expired tasks. For some applications it is
@@ -297,7 +316,7 @@ characteristics of these four load scenarios are given below.
   mean execution time were considered, taken from
   $\mathcal{N}(0.6,0.01)$ and $\mathcal{N}(0.4,0.01)$. During the time
   intervals $[0;3,000)$ and $(6,000;9,000]$ data drawn from the former
-  were used distribution while data drawn from the latter were used to
+  were used while the latter distribution was used to
   generate data for interval $[3,000;6,000]$. This simulates scenarios
   were the application demands different execution times during
   certain phases of its execution. This scenario is displayed in
@@ -308,7 +327,7 @@ characteristics of these four load scenarios are given below.
   followed two distributions, $\mathcal{N}(0.5,0.01)$ and
   $\mathcal{N}(0.5,0.1)$. This scenario is displayed in Figure
   \ref{fig:plotl3}.
-\item L4: A movie trace. The costs are shown in Figure
+\item L4: A movie trace. The execution cost distribution are shown in Figure
   \ref{fig:plotl4}. The values in the graph correspond to the decoding
   times using the \texttt{mplayer} media player for the Eve movie. In
   this trace jobs arrive with a mean period of 0.072 time units and
@@ -396,7 +415,7 @@ use its budget).
 
 Another scenario that does not highlight any significant differences
 between hard and soft reservation is when the server load is low
-enough that there is usually free budget upon completing a task. In
+enough so that there is usually free budget upon completing a task. In
 these situations both hard and soft reservation mechanisms are
 equivalent, because, as less budget is needed per server period than
 the server capacity, there will be very unfrequent budget
@@ -508,7 +527,7 @@ same area is denser in one graph (as happens in the middle section of
 this scenario), it means that the server with a higher density
 completed more tasks. This kind of graph, while not precisely
 describing the distribution of the response times, shows a clear
-picture of hoe they change over time. As this figure shows, in the
+picture of how they change over time. As this figure shows, in the
 heavily loaded part only the soft reservation server can finish tasks
 that need more than the server budget. This suggests that the soft
 reservation server is better able to cope with run-time varying
@@ -604,12 +623,11 @@ reservation schemes present equivalent performance for several
 configurations, but, using simple but illustrative load scenarios, we
 have shown that soft reservation schemes outperforms the hard one by
 having shorter response times, substantially shorter wait times and
-significantly smaller deadline miss ratios. This results suggests that
+significantly smaller deadline miss ratios. These results suggest that
 soft reservation servers are better able to use system resources
 without either compromising overall system schedulability or task
 quality of service. We believe that the results and scenarios
-presented here can be used by people designing reservation-based
-algorithms or real-time operating systems to support some important
+presented here can be used by designers to support their 
 implementation decisions.
 
 \bibliographystyle{latex8}
