@@ -41,32 +41,22 @@
 
 \begin{abstract}
 
-Elaborated scheduling mechanisms have been developed to cope with complex real-time systems. In this context,
-reservation-based scheduling has successfully been used as a suitable technique. In particular,
-the Constant Bandwidth Server (CBS) is one of these techniques which has received special attention recently.
-In this paper we evaluate by extensive simulation two CBS versions, corresponding to its hard and soft reservation schemes.
-The latter makes use of background processor time but to do so it may decrease the server priority too much. 
-While the former circumvents this problem, it follows stricter reservation rules.
-Results obtained from our simulation indicate that both schemes performs equivalently in some scenarios while in several others 
-the soft version significantly outperforms the hard one. Such results are relevant for system designers who can better subsidize
-their implementation decisions.
+  Elaborate scheduling mechanisms have been developed to cope with
+  complex real-time systems. In this context, reservation-based
+  scheduling has successfully been used as a suitable technique. In
+  particular, the Constant Bandwidth Server (CBS) is one of these
+  techniques which has received special attention recently.  In this
+  paper we evaluate by extensive simulation two CBS versions,
+  corresponding to hard and soft reservation schemes.  The latter
+  makes use of background processor time but to do so it may decrease
+  the server priority too much.  While the former circumvents this
+  problem, it follows stricter reservation rules.  Results obtained
+  from our simulation indicate that both schemes performs equivalently
+  in some scenarios while in several others the soft version
+  significantly outperforms the hard one. Such results are relevant
+  for system designers who can better subsidize their implementation
+  decisions.
 
-%  Recently, reservation-based scheduling is becoming more and more
-%  used in real-time operating systems. A reservation-based scheduler
-%  works by having separate schedulers, called servers, running as
-%  processes on the main scheduler, each server having a fraction of
-%  the total processor time reserved for it. There are many ways of
-%  using this fraction of the total bandwidth, but broadly a
-%  reservation scheme is \textbf{hard} if it cannot use more than its
-%  allocated fraction in any interval of time, and \textbf{soft}
-%  otherwise. In this paper we present the first comprehensive
-%  comparison of the performance of soft and hard reservation schemes
-%%  for the CBS algorithm. We find that in some scenarios soft and hard
-%  reservation are equivalent, but in many common representative loads
-%  soft reservation significantly outperforms hard reservation, having
-%  a substantially smaller wait time and missing significantly less
-%  deadlines.
-  
 \end{abstract}
 
 \Section{Introduction}
