@@ -10,9 +10,9 @@
 
 ** apresentando cenário simples mascaramos problemas com soft?
 
-* tirar legenda interna gnuplot
   
 
+* DONE tirar legenda interna gnuplot
 * DONE Seção 4.2 estilo esquisito, tudo meio solto
   dizer que resultados L1-L4 resumidos na tabela 1, descrever os
   general trends observados na tabela

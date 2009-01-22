@@ -6,4 +6,4 @@ set yrange[0:1]
 
 set grid
 
-plot "data/hard-adaptive-response_time-points.data" using 1:2 title "Hard reservation" with points
+plot "data/hard-adaptive-response_time-points.data" using 1:2 title "" with points

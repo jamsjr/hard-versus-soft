@@ -6,4 +6,4 @@ set yrange[0:0.8]
 
 set grid
 
-plot "../src/data/norm-0.4.txt" using 1:2 title "Normally distributed costs" with points
+plot "../src/data/norm-0.4.txt" using 1:2 title "" with points

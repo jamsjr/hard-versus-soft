@@ -6,4 +6,4 @@ set yrange[0:0.8]
 
 set grid
 
-plot "../src/data/trifasico.txt" using 1:2 title "Varying costs." with points
+plot "../src/data/trifasico.txt" using 1:2 title "" with points

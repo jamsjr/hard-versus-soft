@@ -7,5 +7,5 @@ set xrange[-0.1:1.1]
 
 set grid
 
-plot "data/hard-l1-response_time-histo.data" using 1:2 title "Hard reservation" with impulses lw 4
+plot "data/hard-l1-response_time-histo.data" using 1:2 title "" with impulses lw 4
 

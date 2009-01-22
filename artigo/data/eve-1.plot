@@ -6,5 +6,5 @@ set yrange[0:0.1]
 
 set grid
 
-plot "data/soft-eve-delay_time-points.data" using 1:2 title "Soft reservation" with points
+plot "data/soft-eve-delay_time-points.data" using 1:2 title "" with points
 
