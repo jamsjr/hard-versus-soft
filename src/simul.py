@@ -101,7 +101,7 @@ Eu ignoro prioridades dentro desse cbs.
     curr_cap = cap
     dk = period
     self.i = 0
-    for (started, cost, deadline) in tasks:
+    for (i, (started, cost, deadline)) in enumerate(tasks):
       self.i += 1
       if now() <= started: yield hold,self,started-now()
       if now() >= dk:
@@ -109,6 +109,7 @@ Eu ignoro prioridades dentro desse cbs.
         curr_cap = cap
       else:
         curr_cap, dk = self.arrive_reschedule(cap, period, dk, curr_cap, cost)
+      first_run = True
       while True:
         if self.check_deadline(now(), deadline): break
         if self.lose_deadlines:
@@ -119,7 +120,9 @@ Eu ignoro prioridades dentro desse cbs.
         else:
           yield (request,self,sched,-dk)
         this_run = min(curr_cap, cost)
-        self.monitors['delay_time'].observe(now() - started)
+        if first_run:
+          self.monitors['delay_time'].observe(now() - started)
+          first_run = False
         yield hold, self, this_run
         yield release, self, sched
         cost -= this_run

@@ -29,7 +29,11 @@
 \newcommand{\simul}{\textbf{RTSimul}} % Que criatividade. Mudar esse
 % nome depois, urgente
 
-\author{Alexandre Passos, George Lima}
+\author{Alexandre Passos, George Lima \\
+  Deparment of Computer Science (DCC) \\
+  Federal University of Bahia (UFBA) \\
+  Salvador, BA, Brazil
+}
 %\address{Universidade Federal da Bahia}
 \title{On the Use of Hard and Soft Reservation Schemes in \\ Constant Bandwidth Servers}
 
@@ -41,21 +45,19 @@
 
 \begin{abstract}
 
-  Elaborate scheduling mechanisms have been developed to cope with
-  complex real-time systems. In this context, reservation-based
-  scheduling has successfully been used as a suitable technique. In
-  particular, the Constant Bandwidth Server (CBS) is one of these
-  techniques which has received special attention recently.  In this
+  Reservation-based scheduling has successfully been used as a
+  suitable technique to support complex real-time systems. In
+  particular, the Constant Bandwidth Server (CBS) is one such
+  technique that has received special attention recently. In this
   paper we evaluate by extensive simulation two CBS versions,
-  corresponding to hard and soft reservation schemes.  The latter
-  makes use of background processor time but to do so it may decrease
-  the server priority too much.  While the former circumvents this
-  problem, it follows stricter reservation rules.  Results obtained
-  from our simulation indicate that both schemes performs equivalently
-  in some scenarios while in several others the soft version
-  significantly outperforms the hard one. Such results are relevant
-  for system designers who can better subsidize their implementation
-  decisions.
+  corresponding to hard and soft reservation schemes. The latter makes
+  use of background processor time but to do so it may decrease the
+  server priority too much. While the former circumvents this problem,
+  it follows stricter reservation rules. Results obtained from our
+  simulation indicate that both schemes perform equivalently in some
+  scenarios while in several others the soft version significantly
+  outperforms the hard one. Such results are relevant for system
+  designers who can better subsidize their implementation decisions.
 
 \end{abstract}
 
@@ -74,18 +76,18 @@ successfully been applied to support such requirements
 
 RBS techniques are usually implemented by scheduling servers. A server
 is a virtual task responsible for scheduling application tasks
-assigned to it.  Each server $S$ can be defined by a processor
-reservation tuple, $(Q,T)$, where $Q$ is called the server
-capacity and $T$ the server period.  If a task (or group of tasks)
-$\tau$ is assigned to a server $S$, $\tau$ has the right to use
-$Q$ processor time within $T$ time units. Hence, servers can then
-be scheduled as if they were simple periodic tasks.
+assigned to it.  Each server $S$ is determined by a processor
+reservation tuple, $(Q,T)$, where $Q$ is called the server capacity
+and $T$ the server period.  If a task (or group of tasks) $\tau$ is
+assigned to a server $S$, $\tau$ has the right to use $Q$ processor
+time within $T$ time units. Hence, servers can then be scheduled as if
+they were simple periodic tasks.
 
 On top of its conceptual simplicity, RBS has several interesting
 properties \cite{steffens.ea03:resource}. From the scheduling
 viewpoint it is worthing mentioning that: (a) RBS is a means of
 ensuring temporal isolation since task execution can be controlled
-within its reservation envelop
+within its reservation envelope
 \cite{abeni.ea04:resource,mercer.ea94:processor,sprunt.ea89:aperiodic,spuri.ea96:scheduling};
 (b) it is possible to implement hierarchical scheduling when a group
 of tasks share the same server
@@ -175,22 +177,22 @@ in Section \ref{sec:conclusion} our final comments are given.
 \Section{Soft and Hard CBS}
 \label{sec:soft-hard-cbs}
 
-A CBS \cite{abeni.ea98:integrating} is
-defined by a tuple $(Q,T)$ and by a set of rules. The server is allowed to
-run for $Q$ time units over a period of $T$ time units. Whenever a job
-$j$ arrives at the server, it is enqueued in the server queue. The
-server also maintains internally a tuple $(c,d)$, where $c$ is its
-current budget and $d$ is its current deadline. For each time unit a
-task spends running, the value of $c$ is decreased. The CBS is
-scheduled as a normal task with deadline $d$ running on an EDF
-scheduler. The release time of a job is named $r$. The CBS algorithm
-is:
+A CBS \cite{abeni.ea98:integrating} is defined by a tuple $(Q,T)$ and
+by a set of rules. The server is allowed to run for $Q$ time units
+over a period of $T$ time units. Whenever a job $j$ arrives at the
+server, it is enqueued in the server queue. The server also maintains
+internally a tuple $(c,d)$, where $c$ is its current budget and $d$ is
+its current deadline. For each time unit a task spends running, the
+value of $c$ is decreased. The CBS is scheduled as a normal task with
+deadline $d$ running on an EDF scheduler. The release time of a job is
+named $r$. The CBS algorithm is:
 \begin{enumerate}
 \item Whenever the server is scheduling a new job for execution, it
   tests whether $r + (c/Q)T \geq d$. If this is true, then the current
   deadline $d$ is set to $r+T$ and the capacity is set to
   $Q$. Otherwise, the deadline $d$ and the capacity $c$ are unchanged.
-\item When the capacity $c$ becomes $0$, two rules may be applied depending on the CBS version:
+\item When the capacity $c$ becomes $0$, two rules may be applied
+  depending on the CBS version:
   \begin{enumerate}
   \item Soft CBS. The deadline $d$ is set to $d+T$
     and the capacity $c$ is set to $Q$;
@@ -199,12 +201,14 @@ is:
   \end{enumerate}
 \end{enumerate}
 
-It is interesting to observe that the soft CBS trades availability for priority.
-Indeed, according to the soft version, a server is always ready since its budget is never kept null. 
-Nonetheless, the sever may have its deadline postponed too much in periods 
-where it is overloaded. If this occurs, the server may run in background for some time. 
-On the contrary, the hard CBS does not suffer from this effect but may be kept suspended for some time.
-The characterization of these versions with respect to their effects on applications will be reported in the 
+It is interesting to observe that the soft CBS trades availability for
+priority.  Indeed, in the soft version, a server is always ready since
+its budget is never kept null.  Nonetheless, the sever may have its
+deadline postponed too much in periods where it is overloaded. If this
+occurs, the server may wait in background for some time.  On the other
+hand, the hard CBS does not suffer from this effect but may be kept
+suspended for some time.  The characterization of these versions with
+respect to their effects on applications will be reported in the
 following sections.
  
 \Section{Simulation Environment}
@@ -216,14 +220,15 @@ algorithms. Its source code, the data files used in this paper and
 instructions to reproduce our results are available in
 \url{http://github.com/jamsjr/hard-versus-soft/tree/master}. \simul{}
 implements a basic EDF scheduler and, on top of it, runs both hard
-real-time periodic tasks and bandwidth sharing servers. These servers
-can be either hard \cite{buttazzo05:soft} or soft CBS \cite{abeni.ea98:integrating}, previously
-described. Soft real-time tasks running on these servers
-either have their execution times sampled from a probability
-distribution or follow traces generated from a modified version of
-mplayer that reports the start time and decoding cost for each frame
-in a high-resolution video. The same time unit standard was used for
-both the video trace and the synthetic task sets so that all presented
+real-time periodic tasks and bandwidth reservation servers. These
+servers can be either hard \cite{buttazzo05:soft} or soft CBS
+\cite{abeni.ea98:integrating}, previously described. Soft real-time
+tasks running on these servers either have their execution times
+sampled from a probability distribution or follow traces generated
+from a modified version of the \texttt{FFMPEG} decoding library that
+reports the start time and decoding cost for each frame in a
+high-resolution video. The same time unit standard was used for both
+the video trace and the synthetic task sets so that all presented
 measurements are platform-independent.
 
 All the simulations performed in this paper share a common
@@ -258,8 +263,8 @@ parameters:
 \item Overloaded/not overloaded system. We consider a system
   overloaded when its tasks demand more than 100\% of CPU.
 \item Overloaded/not overloaded server. A server $S$ is overloaded
-  when its utilization $u = Q/T$ is not enough to serve the
-  tasks it is serving.
+  when its utilization $u = Q/T$ is not enough to serve the tasks it
+  is serving.
 \end{description}
 
 The metrics we used to evaluate the performance of the servers are
@@ -306,24 +311,24 @@ characteristics of these four load scenarios are given below.
   mean execution time were considered, taken from
   $\mathcal{N}(0.6,0.01)$ and $\mathcal{N}(0.4,0.01)$. During the time
   intervals $[0;3,000)$ and $(6,000;9,000]$ data drawn from the former
-  were used while the latter distribution was used to
-  generate data for interval $[3,000;6,000]$. This simulates scenarios
-  were the application demands different execution times during
-  certain phases of its execution. This scenario is displayed in
-  Figure \ref{fig:plotl2}.
+  were used while the latter distribution was used to generate data
+  for interval $[3,000;6,000]$. This simulates scenarios were the
+  application demands different execution times during certain phases
+  of its execution. This scenario is displayed in Figure
+  \ref{fig:plotl2}.
 \item L3: Constant mean execution time and variable variance.  Another
   simulated scenario considered two simulation intervals, $[0;4,500)$
   and $[4,500;9,000)$.  The execution costs for these intervals
   followed two distributions, $\mathcal{N}(0.5,0.01)$ and
   $\mathcal{N}(0.5,0.1)$. This scenario is displayed in Figure
   \ref{fig:plotl3}.
-\item L4: A movie trace. The execution cost distribution are shown in Figure
-  \ref{fig:plotl4}. The values in the graph correspond to the decoding
-  times using the \texttt{mplayer} media player for the Eve movie. In
-  this trace jobs arrive with a mean period of 0.072 time units and
-  mean costs of 0.0064 time units. This trace is considered for the
-  purpose of testing the behavior of both reservation schemes with a
-  real-life data set.
+\item L4: A movie trace. The execution cost distribution are shown in
+  Figure \ref{fig:plotl4}. The values in the graph correspond to the
+  decoding times using the \texttt{FFMPEG} video decoding library for
+  the Eve movie. In this trace jobs arrive with a mean period of 0.072
+  time units and mean costs of 0.0064 time units. This trace is
+  considered for the purpose of testing the behavior of both
+  reservation schemes with a real-life data set.
 \end{description}
 
 \begin{figure}[h!t]
@@ -368,11 +373,11 @@ between the hard and soft reservation schemes.
 \label{sec:noDifference}
 
 In configurations where expired tasks are not discarded, the system is
-constantly overloaded or the server is underloaded both
-reservation schemes performed equivalently. The explanation for this
-behavior is given below.
+constantly overloaded or the server is underloaded both reservation
+schemes performed equivalently. The explanation for this behavior is
+given below.
 
-\subsubsection{Discarding expired tasks}
+\subsubsection{Not Discarding expired tasks}
 \label{sec:disc-expir-tasks}
 
 Consider a server $S = (Q,T)$ and that at time $t$ there is a
@@ -424,14 +429,14 @@ summarizes the simulation results.
   \centering
   \begin{tabular}[t]{rrrrr} \hline
     \textsc{LS} & \textsc{RS} & \textsc{Mean RT} & \textsc{Mean WT} & \textsc{DMR (\%)} \\ \hline
-    L1 & Soft & $5.1\times 10^{-1}$   & $2.5\times 10^{-1}$   & 5.4  \\
-    L1 & Hard & $5.6\times 10^{-1}$   & $4.1\times 10^{-1}$   & 59.8 \\
-    L2 & Soft & $4.8\times 10^{-1}$   & $1.7\times 10^{-1}$   & 14.4 \\
-    L2 & Hard & $4.4\times 10^{-1}$   & $3.1\times 10^{-1}$   & 37.5 \\
-    L3 & Soft & $5.7\times 10^{-1}$   & $2.4\times 10^{-1}$   & 5.1  \\
-    L3 & Hard & $5.8\times 10^{-1}$   & $4.1\times 10^{-1}$   & 59.4 \\
-    L4 & Soft & $6.5\times 10^{-3}$   & $2.2\times 10^{-3}$   & 0.1  \\
-    L4 & Hard & $3.5\times 10^{-2}$   & $2.2\times 10^{-2}$   & 24.5 \\ \hline    
+    L1 & Soft & $5.1\times 10^{-1}$   & $1.1\times 10^{-1}$   & 5.4  \\
+    L1 & Hard & $5.6\times 10^{-1}$   & $1.2\times 10^{-1}$   & 59.8 \\
+    L2 & Soft & $4.8\times 10^{-1}$   & $1.2\times 10^{-1}$   & 14.4 \\
+    L2 & Hard & $4.4\times 10^{-1}$   & $1.7\times 10^{-1}$   & 37.5 \\
+    L3 & Soft & $5.7\times 10^{-1}$   & $8.0\times 10^{-2}$   & 5.1  \\
+    L3 & Hard & $5.8\times 10^{-1}$   & $1.2\times 10^{-1}$   & 59.4 \\
+    L4 & Soft & $6.5\times 10^{-3}$   & $3.3\times 10^{-4}$   & 0.1  \\
+    L4 & Hard & $3.5\times 10^{-2}$   & $5.6\times 10^{-3}$   & 24.5 \\ \hline    
   \end{tabular}
   \caption{Result summary, with the mean response time (RT), wait time
   (WT) and deadline miss ratio (DMR) given for each load scenario (LS)

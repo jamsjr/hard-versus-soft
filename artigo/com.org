@@ -1,0 +1,52 @@
+* apresentando cenário simples mascaramos problemas com soft?
+* pq a tarefa hard não foi monitorada?
+* como escolhemos Q e T?
+* Graficos mal-explicados
+** por que bimodal?
+** por que um corte no hard em 0.4?
+** qual o número de pontos em cada gráfico?
+** por que um trimodal e nao o outro?
+** explicar bem melhor os histogramas
+* Nos gráficos do trifasico dizer rt, wt, dmr para cada período
+* nos graficos da variancia, idem
+* no l4, dizer melhor pq escolhi rt
+* conferir as referências
+  deixar as citações de tal forma que tirando os [x]s a frase ainda
+  faça o mesmo sentido
+  
+  em vez de "in \cite{}", colocar "by Sdfds sdf sdf \cite{}"
+  
+* tirar "it makes no sense" e colocar algo mais light
+  algo como "for those jobs that miss their deadlines we do not report
+  response times" ou "the response time for a job that does not finish
+  is undefined"
+  
+* tirar interestings
+  dizer interessante notar, interessante enfatizar
+* Seção 4.2 estilo esquisito, tudo meio solto
+  dizer que resultados L1-L4 resumidos na tabela 1, descrever os
+  general trends observados na tabela
+
+  soft sempre perde menos deadlines
+
+  um motivo pelo qual nem em todos os casos soft ganha response time é
+  que hard no response time descarta tarefas que teriam um rt maior
+
+  por isso wt é mais "honesto"
+* Seção L1 "show histograms of response time", repetitivo, remover duplicação
+* dizer que configuração (Q,T) em cada cenário, dizer que é o mesmo em hard-soft
+* "Only postpone its deadline" está mal dito, parece que está executando em background
+* dizer em cada cenário quanto a tarefa consome
+* colocar subseção nova da 4
+  simulação complexa, com vários servidores, soft, hard, tarefas
+  background,
+
+  e dizer antes que esse é um exemplo
+* tirar legenda interna gnuplot
+* usar multirow na tabela
+* colocar logo depois da tabela um um ***important***
+  comparar as metricas sem olhar pro dmr é ruim e beneficia quem tem
+  dmr alto
+
+  a possible way around this problem is to use the deadline miss ratio
+  as a correcting factor
