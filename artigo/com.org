@@ -1,28 +1,14 @@
-* apresentando cenário simples mascaramos problemas com soft?
 * pq a tarefa hard não foi monitorada?
-* como escolhemos Q e T?
-* Graficos mal-explicados
-** por que bimodal?
-** por que um corte no hard em 0.4?
-** qual o número de pontos em cada gráfico?
-** por que um trimodal e nao o outro?
-** explicar bem melhor os histogramas
+  pq monitorar?
 * Nos gráficos do trifasico dizer rt, wt, dmr para cada período
 * nos graficos da variancia, idem
-* no l4, dizer melhor pq escolhi rt
+* no l4, dizer melhor pq escolhi wt
 * conferir as referências
   deixar as citações de tal forma que tirando os [x]s a frase ainda
   faça o mesmo sentido
   
   em vez de "in \cite{}", colocar "by Sdfds sdf sdf \cite{}"
   
-* tirar "it makes no sense" e colocar algo mais light
-  algo como "for those jobs that miss their deadlines we do not report
-  response times" ou "the response time for a job that does not finish
-  is undefined"
-  
-* tirar interestings
-  dizer interessante notar, interessante enfatizar
 * Seção 4.2 estilo esquisito, tudo meio solto
   dizer que resultados L1-L4 resumidos na tabela 1, descrever os
   general trends observados na tabela
@@ -42,6 +28,9 @@
   background,
 
   e dizer antes que esse é um exemplo
+
+** apresentando cenário simples mascaramos problemas com soft?
+
 * tirar legenda interna gnuplot
 * usar multirow na tabela
 * colocar logo depois da tabela um um ***important***
@@ -50,3 +39,19 @@
 
   a possible way around this problem is to use the deadline miss ratio
   as a correcting factor
+
+
+* DONE Graficos mal-explicados
+** por que bimodal?
+** por que um corte no hard em 0.4?
+** qual o número de pontos em cada gráfico?
+** por que um trimodal e nao o outro?
+** explicar bem melhor os histogramas
+* DONE como escolhemos Q e T?
+* DONE tirar "it makes no sense" e colocar algo mais light
+  algo como "for those jobs that miss their deadlines we do not report
+  response times" ou "the response time for a job that does not finish
+  is undefined"
+* DONE tirar interestings
+  dizer interessante notar, interessante enfatizar
+  
