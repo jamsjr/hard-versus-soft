@@ -153,14 +153,14 @@ characteristics of its hard and soft reservation schemes.  By
 benchmarking these two CBS versions in a simulation environment, they
 are systematically compared against each other.  Since the use of CBS
 has extensively been reported and one usually chooses arbitrarily
-between these two versions
-(e.g. \cite{abeni.ea99:adaptive,abeni.ea05:qos}), the results reported
-here can better subsidize their implementation decisions.  The
-reported study was carried out making use of the real-time scheduling
-simulator \simul{}, implemented in Pyton. Although there are other
-simulation tools \cite{ancilotti.ea96:flexible}, implementing this
-simulator ourselves allowed us to easily tune it to our specific
-requirements.
+between these two versions (e.g. the work by Abeni et al. on adaptive
+reservations and QoS \cite{abeni.ea99:adaptive,abeni.ea05:qos}), the
+results reported here can better subsidize their implementation
+decisions.  The reported study was carried out making use of the
+real-time scheduling simulator \simul{}, implemented in
+Pyton. Although there are other simulation tools
+\cite{ancilotti.ea96:flexible}, implementing this simulator ourselves
+allowed us to easily tune it to our specific requirements.
 
 \SubSection{Structure of this paper}
 \label{sec:structure-this-paper}
@@ -401,14 +401,10 @@ makes soft and hard reservation completely equivalent.
 
 When the system is always perfectly dimensioned or overloaded (there
 is no system idle time) both reservation schemes are equivalent. This
-is so because the soft server can only postpone its deadline to get
-extra budget when there is free system time. Even if a soft
-reservation server does exhaust its budget before its deadline, a
-system under high load will usually have other higher-priority tasks
-running and hence stopping the soft reservation server from using its
-extra budget until the time gets closer to the server deadline (and by
-then an equivalent hard reservation server would already be able to
-use its budget).
+is so because a soft reservation server will only use extra budget
+obtained by postponing its deadline when there are no other tasks with
+a higher priority than its next deadline, and this situation is
+unlikely in an overloaded system.
 
 \subsubsection{Underloaded server}
 \label{sec:server-load}
@@ -546,7 +542,7 @@ for the hard reservation server. Thus, in variable environments a soft
 reservation scheme seems more suitable for situations where the
 application load changes over time. This information might be relevant
 for soft real-time systems running some adaptation mechanism, such as
-the one described in \cite{abeni.ea05:qos}.
+the one described by Abeni et al. \cite{abeni.ea05:qos}.
 
 \begin{figure}[t]
   \centering
@@ -603,19 +599,21 @@ the performance characteristics we observed are reproduced. In this
 experiment, we ran both a soft reservation server and a hard
 reservation server on scenario L4. Figure \ref{fig:eve} shows the wait
 time for both a hard and a soft reservation servers running this task
-set. As can be easily seen, the wait time for the hard reservation
-server is always higher than for the soft reservation server,
-sometimes high enough that the task has already missed its deadline by
-the time it starts executing. This might account for the fact that, as
-can be seen in Table \ref{tab:summary}, the soft reservation server
-only missed 0.1\% of the deadlines, while the hard reservation server
-missed 24.54\%. This result seems, at first, counter-intuitive, since
-the soft reservation server, by delaying its deadline whenever the
-execution costs are too high, can have an arbitrarily low priority. On
-the other hand, the same task will take more overall time to be served
-with a hard reservation server, since it will have to wait for
-capacity replenishment before continuing execution. Therefore, on
-average, the soft reservation scheme seems more responsive.
+set. The response time follows a similar pattern and can be ommitted
+from this paper. As can be easily seen, the wait time for the hard
+reservation server is always higher than for the soft reservation
+server, sometimes high enough that the task has already missed its
+deadline by the time it starts executing. This might account for the
+fact that, as can be seen in Table \ref{tab:summary}, the soft
+reservation server only missed 0.1\% of the deadlines, while the hard
+reservation server missed 24.54\%. This result seems, at first,
+counter-intuitive, since the soft reservation server, by delaying its
+deadline whenever the execution costs are too high, can have an
+arbitrarily low priority. On the other hand, the same task will take
+more overall time to be served with a hard reservation server, since
+it will have to wait for capacity replenishment before continuing
+execution. Therefore, on average, the soft reservation scheme seems
+more responsive.
 
 \Section{Conclusion}
 \label{sec:conclusion}
