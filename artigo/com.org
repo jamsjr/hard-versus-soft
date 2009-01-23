@@ -2,15 +2,14 @@
   pq monitorar?
 * Nos gráficos do trifasico dizer rt, wt, dmr para cada período
 * nos graficos da variancia, idem
-* colocar subseção nova da 4
+
+* DONE colocar subseção nova da 4
   simulação complexa, com vários servidores, soft, hard, tarefas
   background,
 
   e dizer antes que esse é um exemplo
 
-** apresentando cenário simples mascaramos problemas com soft?
-
-  
+  apresentando cenário simples mascaramos problemas com soft?
 
 * DONE tirar legenda interna gnuplot
 * DONE Seção 4.2 estilo esquisito, tudo meio solto

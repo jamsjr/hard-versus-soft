@@ -98,18 +98,19 @@ scheduler level.  Such characteristics have motivated considerable
 research in the area
 \cite{abeni.ea99:adaptive,caccamo.ea00:capacity,caccamo.ea05:efficient,oliveira.ea08:dynamic,oliveira.ea09:dynamic,lin.ea05:improving}.
 In this paper we aim at better characterizing the performance of two
-reservation schemes commonly implemented in real-time systems.
+reservation schemes commonly implemented in real-time systems
+\cite{perng.ea06:real}.
 
-A reservation scheme is \textbf{hard} if a server
-$S = (Q,T)$ cannot be scheduled to run for more than $Q$ time
-units within any time interval of $T$ units even if there is idle
-processor time available. On the other hand, a \textbf{soft} scheme
-allows $S$ to execute beyond its reservation as long as system
-schedulability is not compromised. Often the decision of implementing
-one of these schemes arises. One of the widely known implementations
-of soft RBS scheme in EDF scheduled systems is the Constant Bandwidth
-Server (\textbf{CBS}) \cite{abeni.ea04:resource}.  Due to the number
-of other scheduling mechanisms based on CBS
+A reservation scheme is \textbf{hard} if a server $S = (Q,T)$ cannot
+be scheduled to run for more than $Q$ time units within any time
+interval of $T$ units even if there is idle processor time
+available. On the other hand, a \textbf{soft} scheme allows $S$ to
+execute beyond its reservation as long as system schedulability is not
+compromised. Often the decision of implementing one of these schemes
+arises. One of the widely known implementations of soft RBS scheme in
+EDF scheduled systems is the Constant Bandwidth Server (\textbf{CBS})
+\cite{abeni.ea04:resource}.  Due to the number of other scheduling
+mechanisms based on CBS
 \cite{abeni.ea05:qos,caccamo.ea00:capacity,caccamo.ea05:efficient,lipari.ea00:greedy},
 we chose it as a case study in this paper.
 
@@ -241,8 +242,9 @@ each other. More complex simulations, involving more servers and
 tasks, were also tested. In both complex and simple simulation
 set-ups, the behavior of the reservation schemes was shown to be
 similar. Hence, we chose to present here the simplest simulation
-set-up for the sake of data analysis.  Several configurations of this
-set-up were considered.
+set-up for the sake of data analysis and also one more complex
+scenario to suggest that these results are reproducible in real-life.
+Several configurations of this set-up were considered.
 
 \SubSection{Simulation Configurations}
 \label{sec:configurations}
@@ -281,12 +283,12 @@ Considering all combination of these four parameters leads to 16
 distinct configurations. In several of them the behaviors of both
 reservation schemes were found to be equivalent.  For the ones in
 which they are not equivalent, we grouped the possible configurations
-into four scenarios.
+into five scenarios.
 
 \SubSection{Characterizing the server load}
 \label{sec:charact-server-load}
 
-Four distinct application loads (L1-L4) were considered by varying the
+Five distinct application loads (L1-L5) were considered by varying the
 execution cost distributions.  For the sake of data analysis, it is
 interesting to observe how hard and soft reservation schemes behave
 with more controlled load distributions. This is the goal of loads
@@ -294,8 +296,10 @@ L1-L3, which takes synthetic generated data. The data correspond to
 execution times of jobs to be served during $9,000$ time units of
 simulation.  The inter-arrival time of these jobs were kept constant
 and equal to one time unit.  The load L4 was taken by a movie trace
-and was used to represent more realistic soft-real time data. The
-characteristics of these four load scenarios are given below.
+and was used to represent more realistic soft-real time data. Load L5
+uses the same trace as load L4 but runs 5 independent servers
+competing for the processor. The characteristics of these five load
+scenarios are given below.
 
 \begin{description}
 \item L1: Constant mean execution time and low variance. Job execution
@@ -334,6 +338,11 @@ characteristics of these four load scenarios are given below.
   reservation schemes with a real-life data set. The background task
   consumes 90\% of the processor time. The server's capacity is
   $0.0065$ and its period is $0.072$ time units.
+\item L5: A complex scenario. To confirm the thesis that these results
+  are reproducible in more complex scenarios, we ran five competing
+  servers, each with the same task set as scenario L4. Each server has
+  capacity $0.0065$ and period $0.072$, and the background task takes
+  50\% of the processor time.
 \end{description}
 
 \begin{figure}[h!t]
@@ -423,29 +432,33 @@ exhaustion.
 Table \ref{tab:summary} summarizes the simulation results for the
 previously described scenarios. It can be easily seen that a soft
 reservation server has usually a much smaller deadline miss ratio than
-a hard reservation server in the same scenario. The mean response
-times are mostly similar, except for scenario L4, but it is important
-to note that comparing mean response time of servers with different
+a hard reservation server in the same scenario. In scenario L5, the
+table shows the mean response time, wait time and deadline miss ratio
+over all five servers in that scenario. The mean response times are
+mostly similar, except for scenarios L4 and L5, but it is important to
+note that comparing mean response time of servers with different
 deadline miss ratios is not reliable, since a server can always reduce
 its mean response time by failing to serve more demanding
 tasks. Hence, a more realiable picture of how the servers behave under
 each scenario can be pieced by looking at the mean wait time and the
-deadline miss ratio. From these metrics it can be easily seen that a
-soft reservation server outperforms a hard reservation server in all
-scenarios. The next sections go over each scenario in higher detail.
+deadline miss ratio. These metrics show that a soft reservation server
+outperforms a hard reservation server in all simulated scenarios. The
+next sections go over each scenario in higher detail.
 
 \begin{table}[ht]
   \centering
   \begin{tabular}[t]{rrrrr} \hline
     \textsc{LS} & \textsc{RS} & \textsc{Mean RT} & \textsc{Mean WT} & \textsc{DMR (\%)} \\ \hline
     \multirow{2}{*}{L1} & Soft & $5.1\times 10^{-1}$   & $1.1\times 10^{-1}$   & 5.4  \\
-     & Hard & $5.6\times 10^{-1}$   & $1.2\times 10^{-1}$   & 59.8 \\ \hline
+                        & Hard & $5.6\times 10^{-1}$   & $1.2\times 10^{-1}$   & 59.8 \\ \hline
     \multirow{2}{*}{L2} & Soft & $4.8\times 10^{-1}$   & $1.2\times 10^{-1}$   & 14.4 \\
-     & Hard & $4.4\times 10^{-1}$   & $1.7\times 10^{-1}$   & 37.5 \\ \hline
+                        & Hard & $4.4\times 10^{-1}$   & $1.7\times 10^{-1}$   & 37.5 \\ \hline
     \multirow{2}{*}{L3} & Soft & $5.7\times 10^{-1}$   & $8.0\times 10^{-2}$   & 5.1  \\
-     & Hard & $5.8\times 10^{-1}$   & $1.2\times 10^{-1}$   & 59.4 \\ \hline
+                        & Hard & $5.8\times 10^{-1}$   & $1.2\times 10^{-1}$   & 59.4 \\ \hline
     \multirow{2}{*}{L4} & Soft & $6.5\times 10^{-3}$   & $3.3\times 10^{-4}$   & 0.1  \\
-     & Hard & $3.5\times 10^{-2}$   & $5.6\times 10^{-3}$   & 24.5 \\ \hline    
+                        & Hard & $3.5\times 10^{-2}$   & $5.6\times 10^{-3}$   & 24.5 \\ \hline    
+    \multirow{2}{*}{L5} & Soft & $2.5\times 10^{-3}$   & $6.4\times 10^{-4}$   & 0.56  \\
+                        & Hard & $3.8\times 10^{-2}$   & $1.2\times 10^{-2}$   & 23.9 \\ \hline    
   \end{tabular}
   \caption{Result summary, with the mean response time (RT), wait time
   (WT) and deadline miss ratio (DMR) given for each load scenario (LS)
@@ -615,6 +628,17 @@ it will have to wait for capacity replenishment before continuing
 execution. Therefore, on average, the soft reservation scheme seems
 more responsive.
 
+\subsubsection{Scenario L5}
+\label{sec:scenario-l5}
+
+This scenario aims to show that increasing the complexity of the
+situation does not change perceptively the characteristics of hard and
+soft reservation. As can be seen in Table \ref{tab:summary}, the mean
+deadline miss ratio of the hard reservation servers is still
+substantially higher than the mean deadline miss ratio of the soft
+reservation servers. Also, all results observed in scenario L4 are
+replicated.
+
 \Section{Conclusion}
 \label{sec:conclusion}
 
@@ -633,7 +657,7 @@ significantly smaller deadline miss ratios. These results suggest that
 soft reservation servers are better able to use system resources
 without either compromising overall system schedulability or task
 quality of service. We believe that the results and scenarios
-presented here can be used by designers to support their 
+presented here can be used by designers to support their
 implementation decisions.
 
 \bibliographystyle{latex8}
