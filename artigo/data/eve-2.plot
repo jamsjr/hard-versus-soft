@@ -3,6 +3,8 @@ set terminal post enh
 set output "data/eve-2.eps"
 
 set yrange[0:0.1]
+set xlabel "Release Time"
+set ylabel "Wait time"
 
 set grid
 

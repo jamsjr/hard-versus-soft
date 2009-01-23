@@ -167,8 +167,8 @@ allowed us to easily tune it to our specific requirements.
 \label{sec:structure-this-paper}
 
 A more precise definition of the CBS versions considered in this
-paper is given in section \ref{sec:soft-hard-cbs}. Some comments on the motivation for 
-this study is also presented in this section.  
+paper is given in Section \ref{sec:soft-hard-cbs}. Some comments on the motivation for 
+this study is also presented in this Section.  
 Section \ref{sec:simul-envir} describes the system model and the
 simulation environment.  In order to give a wide picture of the
 simulated scheduling mechanisms, we conducted the evaluation taking
@@ -185,9 +185,9 @@ over a period of $T$ time units. Whenever a job $j$ arrives at the
 server, it is enqueued in the server queue. The server also maintains
 internally a tuple $(c,d)$, where $c$ is its current budget and $d$ is
 its current deadline. For each time unit a task spends running, the
-value of $c$ is decreased. The CBS is scheduled as a normal task with
-deadline $d$ running on an EDF scheduler. The release time of a job is
-named $r$. The CBS algorithm is:
+value of $c$ is decreased by the same amount. The CBS is scheduled as
+a normal task with deadline $d$ running on an EDF scheduler. The
+release time of a job is named $r$. The CBS algorithm is:
 \begin{enumerate}
 \item Whenever the server is scheduling a new job for execution, it
   tests whether $r + (c/Q)T \geq d$. If this is true, then the current
@@ -211,7 +211,7 @@ occurs, the server may wait in background for some time.  On the other
 hand, the hard CBS does not suffer from this effect but may be kept
 suspended for some time.  The characterization of these versions with
 respect to their effects on applications will be reported in the
-following sections.
+following Sections.
  
 \Section{Simulation Environment}
 \label{sec:simul-envir}
@@ -224,7 +224,7 @@ instructions to reproduce our results are available in
 implements a basic EDF scheduler and, on top of it, runs both hard
 real-time periodic tasks and bandwidth reservation servers. These
 servers can be either hard \cite{buttazzo05:soft} or soft CBS
-\cite{abeni.ea98:integrating}, previously described. Soft real-time
+\cite{abeni.ea98:integrating}, as previously described. Soft real-time
 tasks running on these servers either have their execution times
 sampled from a probability distribution or follow traces generated
 from a modified version of the \texttt{FFMPEG} decoding library that
@@ -233,18 +233,19 @@ high-resolution video. The same time unit standard was used for both
 the video trace and the synthetic task sets so that all presented
 measurements are platform-independent.
 
-All the simulations performed in this paper share a common
-set-up. There is a periodic hard real-time task running in the
-background and one soft real-time server, implementing either hard or
-soft reservation schemes.  This server will be monitored during the
-simulation so that both reservation schemes can be compared against
-each other. More complex simulations, involving more servers and
-tasks, were also tested. In both complex and simple simulation
-set-ups, the behavior of the reservation schemes was shown to be
-similar. Hence, we chose to present here the simplest simulation
-set-up for the sake of data analysis and also one more complex
-scenario to suggest that these results are reproducible in real-life.
-Several configurations of this set-up were considered.
+Most simulations performed in this paper share a common set-up. There
+is a periodic hard real-time task and one soft real-time server,
+implementing either hard or soft reservation schemes. The server and
+the task compete for processor according to EDF rules. The server is
+monitored during the simulation so that both reservation schemes can
+be compared against each other. This simple simulation set-up make it
+easier to analyze the behavior of the system under different load and
+configurations. More complex simulations, involving more servers and
+tasks, were also tested. In both complex and simple simulation setups,
+the behavior of the reservation schemes was shown to be similar. In
+order to illustrate this, we also present results obtained by a more
+complex simulation set-up.  In the following we define the
+configurations and the server loads considered during the simulation.
 
 \SubSection{Simulation Configurations}
 \label{sec:configurations}
@@ -338,11 +339,10 @@ scenarios are given below.
   reservation schemes with a real-life data set. The background task
   consumes 90\% of the processor time. The server's capacity is
   $0.0065$ and its period is $0.072$ time units.
-\item L5: A complex scenario. To confirm the thesis that these results
-  are reproducible in more complex scenarios, we ran five competing
-  servers, each with the same task set as scenario L4. Each server has
-  capacity $0.0065$ and period $0.072$, and the background task takes
-  50\% of the processor time.
+\item L5: A complex scenario. Five competing servers, each with the
+  same task set as scenario L4. Each server has capacity $0.0065$ and
+  period $0.072$, and the background task takes 50\% of the processor
+  time.
 \end{description}
 
 \begin{figure}[h!t]
@@ -376,10 +376,10 @@ scenarios are given below.
 \Section{Simulation Results}
 \label{sec:simulation-results}
 
-As mentioned in section \ref{sec:configurations}, not all
+As mentioned in Section \ref{sec:configurations}, not all
 configurations led to a performance difference. Section
 \ref{sec:noDifference} first presents some comments on the reasons for
-this behavior, and then, section \ref{sec:indiv-simul-results}
+this behavior, and then, Section \ref{sec:indiv-simul-results}
 describes the results that highlight any differences in performance
 between the hard and soft reservation schemes.
 
@@ -435,7 +435,7 @@ reservation server has usually a much smaller deadline miss ratio than
 a hard reservation server in the same scenario. In scenario L5, the
 table shows the mean response time, wait time and deadline miss ratio
 over all five servers in that scenario. The mean response times are
-mostly similar, except for scenarios L4 and L5, but it is important to
+mostly similar, except for scenarios L4 and L5. It is important to
 note that comparing mean response time of servers with different
 deadline miss ratios is not reliable, since a server can always reduce
 its mean response time by failing to serve more demanding
@@ -507,15 +507,11 @@ possible value, in time units, for the response or waiting times,
 while the vertical axis counts how many times each such value has
 actually occurred. In this scenario, the soft reservation server
 missed 5.4\% of the deadlines and the hard reservation server missed
-59.8\%, as seen in Table \ref{tab:summary}. These histograms highlight
-behavior reproduced in more complex scenarios. In Figure
-\ref{fig:rth}, the two modes of the distributions represent the
-response times for when the task executes immediately (the peaks
-around $0.4$) and when it is delayed by the background task (the peaks
-around $1.0$). Tasks that are delayed by more than that miss their
-deadlines. An idea of how many tasks miss their deadlines can be seen
-by looking at Figure \ref{fig:dth}, since every task in the third peak
-(the one around $1.0$) in the histograms will miss its deadline.
+59.8\%, as seen in Table \ref{tab:summary}. In Figure \ref{fig:rth},
+the two modes of the distributions represent the response times for
+when the task executes immediately (the peaks around $0.4$) and when
+it is delayed by the background task (the peaks around $1.0$). Tasks
+that are delayed by more than that miss their deadlines.
 
 \begin{figure}[t]
   \centering
@@ -636,7 +632,7 @@ situation does not change perceptively the characteristics of hard and
 soft reservation. As can be seen in Table \ref{tab:summary}, the mean
 deadline miss ratio of the hard reservation servers is still
 substantially higher than the mean deadline miss ratio of the soft
-reservation servers. Also, all results observed in scenario L4 are
+reservation servers. Indeed, the trends observed for scenario L4 are
 replicated.
 
 \Section{Conclusion}

@@ -3,6 +3,8 @@ set terminal post enh
 set output "data/trace-eve.eps"
 
 set yrange[0:0.03]
+set xlabel "Release Time"
+set ylabel "Cost"
 
 set grid
 
