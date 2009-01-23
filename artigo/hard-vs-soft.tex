@@ -430,12 +430,15 @@ exhaustion.
 \label{sec:indiv-simul-results}
 
 Table \ref{tab:summary} summarizes the simulation results for the
-previously described scenarios. It can be easily seen that a soft
-reservation server has usually a much smaller deadline miss ratio than
-a hard reservation server in the same scenario. In scenario L5, the
-table shows the mean response time, wait time and deadline miss ratio
-over all five servers in that scenario. The mean response times are
-mostly similar, except for scenarios L4 and L5. It is important to
+previously described scenarios. In our simulations we do not monitor
+the background hard real-time task, since its hitting all its
+deadlines is guaranteed by our usage of the EDF algorithm and the
+system utilization being kept below 1. It can be easily seen that a
+soft reservation server has usually a much smaller deadline miss ratio
+than a hard reservation server in the same scenario. In scenario L5,
+the table shows the mean response time, wait time and deadline miss
+ratio over all five servers in that scenario. The mean response times
+are mostly similar, except for scenarios L4 and L5. It is important to
 note that comparing mean response time of servers with different
 deadline miss ratios is not reliable, since a server can always reduce
 its mean response time by failing to serve more demanding
