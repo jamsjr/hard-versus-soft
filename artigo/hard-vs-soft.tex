@@ -1,10 +1,11 @@
-\documentclass[times, 10pt,twocolumn]{article} 
-\usepackage{latex8}
+\documentclass[12pt]{article} 
+\usepackage{sbc-template}
 \usepackage{times}
 \usepackage{amsmath}
 \usepackage{amsthm}
 \usepackage{graphicx}
 \usepackage{url}
+\usepackage[utf8x]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{color}
 \usepackage{subfig}
@@ -30,12 +31,12 @@
 \newcommand{\simul}{\textbf{RTSimul}} % Que criatividade. Mudar esse
 % nome depois, urgente
 
-\author{Alexandre Passos, George Lima \\
-  Deparment of Computer Science (DCC) \\
+\sloppy
+
+\author{Alexandre Passos, George Lima}
+\address{  Deparment of Computer Science (DCC) \\
   Federal University of Bahia (UFBA) \\
-  Salvador, BA, Brazil
-}
-%\address{Universidade Federal da Bahia}
+  Salvador, BA, Brazil}
 \title{On the Use of Hard and Soft Reservation Schemes in \\ Constant Bandwidth Servers}
 
 \begin{document}
@@ -61,18 +62,35 @@
   designers who can better subsidize their implementation decisions.
 
 \end{abstract}
-
-\Section{Introduction}
+  
+\begin{resumo}
+  Técnicas de escalonamento por reserva de banda já foram usadas com
+  sucesso para dar suporte a sistemas de tempo real complexos. Em
+  particular, o \textit{Constant Bandwidth Server} (CBS) é uma dessas
+  técnicas que tem recebido atenção especial recentemente. Nesse
+  artigo avaliamos, por simulações, a performance de duas variantes do
+  CBS, correspondentes a reservas de banda \textit{soft} e
+  \textit{hard}. A primeira faz uso de tempo ocioso do processador,
+  mas, para fazer isso, pode diminuir demais a prioridade do
+  servidor. Enquanto a outra contorna esse problema, ela segue regras
+  de reserva deveras estritas. Resultados das nossas simulações
+  indicam que ambos os esquemas performam de forma equivalente em
+  alguns cenários, enquanto em vários outros a versão \textit{soft} é
+  significantemente melhor que a versão \textit{hard}. Esses
+  resultados são relevantes para projetistas de sistemas, que podem
+  usá-los para subsidizar suas decisões.
+\end{resumo}
+\section{Introduction}
 \label{sec:introduction}
 
-Real-time systems once structured as a set of
-simple periodic hard tasks \cite{liu.ea73:scheduling} have become more
-complex. Nowadays such systems are often composed of hard and soft
-real-time tasks, both of which can be either periodic or non-periodic.
-Usual requirements of these modern real-time systems include not only
-predictability but also responsiveness and adaptiveness. In this
-context, reservation-based scheduling, \textbf{RBS} for short, has
-successfully been applied to support such requirements
+Real-time systems once structured as a set of simple periodic hard
+tasks \cite{liu.ea73:scheduling} have become more complex. Nowadays
+such systems are often composed of hard and soft real-time tasks, both
+of which can be either periodic or non-periodic.  Usual requirements
+of these modern real-time systems include not only predictability but
+also responsiveness and adaptiveness. In this context,
+reservation-based scheduling, \textbf{RBS} for short, has successfully
+been applied to support such requirements
 \cite{abeni.ea04:resource,mercer.ea94:processor,rajkumar.ea98:resource,sprunt.ea89:aperiodic,steffens.ea03:resource}.
 
 RBS techniques are usually implemented by scheduling servers. A server
@@ -81,8 +99,8 @@ assigned to it.  Each server $S$ is determined by a processor
 reservation tuple, $(Q,T)$, where $Q$ is called the server capacity
 and $T$ the server period.  If a task (or group of tasks) $\tau$ is
 assigned to a server $S$, $\tau$ has the right to use $Q$ processor
-time within $T$ time units. Hence, servers can then be scheduled as if
-they were simple periodic tasks.
+time units within $T$ total time units. Hence, servers can then be
+scheduled as if they were simple periodic tasks.
 
 On top of its conceptual simplicity, RBS has several interesting
 properties \cite{steffens.ea03:resource}. From the scheduling
@@ -130,7 +148,8 @@ to recharge the server budget. In order to support implementation
 decisions regarding hard and soft reservation schemes comparative
 studies are still needed.
 
-\SubSection{Related work}
+\subsection{Related work}
+\label{sec:related-work}
 
 There is extensive research on comparing RBS
 techniques.  Some of them are based on fixed-priority scheduling
@@ -145,7 +164,7 @@ version of CBS, though.  The work by Rajkumar et
 al. \cite{rajkumar.ea01:resource} illustrates the use of hard and soft
 versions of a fixed-priority RBS using a very simple task set.
 
-\SubSection{Contributions of this paper}
+\subsection{Contributions of this paper}
 \label{sec:contr-this-paper}
 
 We report a comprehensive comparative study on the performance of
@@ -163,7 +182,7 @@ Pyton. Although there are other simulation tools
 \cite{ancilotti.ea96:flexible}, implementing this simulator ourselves
 allowed us to easily tune it to our specific requirements.
 
-\SubSection{Structure of this paper}
+\subsection{Structure of this paper}
 \label{sec:structure-this-paper}
 
 A more precise definition of the CBS versions considered in this
@@ -176,7 +195,7 @@ into consideration different simulation scenarios. Results from the
 simulation are discussed in Section \ref{sec:simulation-results} while
 in Section \ref{sec:conclusion} our final comments are given.
 
-\Section{Soft and Hard CBS}
+\section{Soft and Hard CBS}
 \label{sec:soft-hard-cbs}
 
 A CBS \cite{abeni.ea98:integrating} is defined by a tuple $(Q,T)$ and
@@ -187,21 +206,8 @@ internally a tuple $(c,d)$, where $c$ is its current budget and $d$ is
 its current deadline. For each time unit a task spends running, the
 value of $c$ is decreased by the same amount. The CBS is scheduled as
 a normal task with deadline $d$ running on an EDF scheduler. The
-release time of a job is named $r$. The CBS algorithm is:
-\begin{enumerate}
-\item Whenever the server is scheduling a new job for execution, it
-  tests whether $r + (c/Q)T \geq d$. If this is true, then the current
-  deadline $d$ is set to $r+T$ and the capacity is set to
-  $Q$. Otherwise, the deadline $d$ and the capacity $c$ are unchanged.
-\item When the capacity $c$ becomes $0$, two rules may be applied
-  depending on the CBS version:
-  \begin{enumerate}
-  \item Soft CBS. The deadline $d$ is set to $d+T$
-    and the capacity $c$ is set to $Q$;
-  \item Hard CBS. The server waits until time $d$ and then sets the
-    deadline $d$ to $d+T$ and the capacity $c$ to $Q$.
-  \end{enumerate}
-\end{enumerate}
+release time of a job is named $r$. The CBS algorithm can be found in
+Abeni et al.\cite{abeni.ea98:integrating}.
 
 It is interesting to observe that the soft CBS trades availability for
 priority.  Indeed, in the soft version, a server is always ready since
@@ -213,7 +219,7 @@ suspended for some time.  The characterization of these versions with
 respect to their effects on applications will be reported in the
 following Sections.
  
-\Section{Simulation Environment}
+\section{Simulation Environment}
 \label{sec:simul-envir}
 
 To perform the experiments presented in this paper we implemented
@@ -247,7 +253,7 @@ order to illustrate this, we also present results obtained by a more
 complex simulation set-up.  In the following we define the
 configurations and the server loads considered during the simulation.
 
-\SubSection{Simulation Configurations}
+\subsection{Simulation Configurations}
 \label{sec:configurations}
 
 In order to design our simulation to cover several different
@@ -269,24 +275,14 @@ parameters:
   is serving.
 \end{description}
 
-The metrics we used to evaluate the performance of the servers are
-response time, wait time and deadline miss ratio. For a given job that
-completes, its \textbf{response time} is the time interval between the
-time it arrived and the time it completed executing. The response time
-for a job that misses its deadline and is discarded is undefined. A
-job's \textbf{wait time} is defined as the time interval between its
-arrival time and the time it started executing. For a server, its
-\textbf{deadline miss ratio} is the fraction $l/t$, where $l$ is the
-number of jobs that missed their deadlines and $t$ is the total number
-of jobs scheduled for that server.
-
 Considering all combination of these four parameters leads to 16
 distinct configurations. In several of them the behaviors of both
 reservation schemes were found to be equivalent.  For the ones in
 which they are not equivalent, we grouped the possible configurations
-into five scenarios.
+into five scenarios. The metrics we used to evaluate the performance
+of the servers are response time, wait time and deadline miss ratio.
 
-\SubSection{Characterizing the server load}
+\subsection{Characterizing the server load}
 \label{sec:charact-server-load}
 
 Five distinct application loads (L1-L5) were considered by varying the
@@ -296,40 +292,38 @@ with more controlled load distributions. This is the goal of loads
 L1-L3, which takes synthetic generated data. The data correspond to
 execution times of jobs to be served during $9,000$ time units of
 simulation.  The inter-arrival time of these jobs were kept constant
-and equal to one time unit.  The load L4 was taken by a movie trace
-and was used to represent more realistic soft-real time data. Load L5
-uses the same trace as load L4 but runs 5 independent servers
-competing for the processor. The characteristics of these five load
-scenarios are given below.
+and equal to one time unit.  The load L4 was extracted from a movie
+trace and was used to represent more realistic soft-real time
+data. Load L5 uses the same trace as load L4 but runs 5 independent
+servers competing for the processor. The characteristics of these five
+load scenarios are given below.
 
 \begin{description}
 \item L1: Constant mean execution time and low variance. Job execution
   costs were generated during the simulation time, set to $9,000$ time
   units, according to a normal distribution with mean $0.4$ and (low)
   variance equal to $0.01$. In other words, the execution cost of each
-  job to be served follows $\mathcal{N}(0.4,0.01)$. This scenario can
-  be seen in Figure \ref{fig:plotl1}. The background task, in this
-  scenario, consumes 60\% of the processor time. The server's capacity
-  is $0.4$ and its period is $1$ time unit.
+  job to be served follows $\mathcal{N}(0.4,0.01)$. The background
+  task, in this scenario, consumes 60\% of the processor time. The
+  server's capacity is $0.4$ and its period is $1$ time unit.
 \item L2: Variable mean execution time and low variance.  In order to
   simulate controlled variation of execution times, two values for the
-  mean execution time were considered, taken from
+  mean execution time were considered, sampled from
   $\mathcal{N}(0.6,0.01)$ and $\mathcal{N}(0.4,0.01)$. During the time
   intervals $[0;3,000)$ and $(6,000;9,000]$ data drawn from the former
   were used while the latter distribution was used to generate data
   for interval $[3,000;6,000]$. This simulates scenarios were the
   application demands different execution times during certain phases
-  of its execution. This scenario is displayed in Figure
-  \ref{fig:plotl2}. The background task, in this scenario, consumes
+  of its execution. The background task, in this scenario, consumes
   60\% of the processor time. The server's capacity is $0.46$ and its
   period is $1$ time unit.
 \item L3: Constant mean execution time and variable variance.  Another
   simulated scenario considered two simulation intervals, $[0;4,500)$
   and $[4,500;9,000)$.  The execution costs for these intervals
   followed two distributions, $\mathcal{N}(0.5,0.01)$ and
-  $\mathcal{N}(0.5,0.1)$. This scenario is displayed in Figure
-  \ref{fig:plotl3}. The background task consumes 50\% of the processor
-  time, the server's capacity is $0.5$ and its period is $1$ time unit.
+  $\mathcal{N}(0.5,0.1)$. The background task consumes 50\% of the
+  processor time, the server's capacity is $0.5$ and its period is $1$
+  time unit.
 \item L4: A movie trace. The execution cost distribution are shown in
   Figure \ref{fig:plotl4}. The values in the graph correspond to the
   decoding times using the \texttt{FFMPEG} video decoding library for
@@ -347,33 +341,12 @@ scenarios are given below.
 
 \begin{figure}[h!t]
   \centering
-  \includegraphics[scale=0.31]{trace-normal}
-  \caption{Execution cost distribution for the scenario L1.}
-  \label{fig:plotl1}
-\end{figure}
-
-\begin{figure}[h!t]
-  \centering
-  \includegraphics[scale=0.31]{trace-trifasico}
-  \caption{Execution cost distribution for the scenario L2.}
-  \label{fig:plotl2}
-\end{figure}
-
-\begin{figure}[h!t]
-  \centering
-  \includegraphics[scale=0.31]{trace-variance}
-  \caption{Execution cost distribution for the scenario L3.}
-  \label{fig:plotl3}
-\end{figure}
-
-\begin{figure}[h!t]
-  \centering
-  \includegraphics[scale=0.31]{trace-eve}
+  \includegraphics[scale=0.26]{trace-eve}
   \caption{Execution cost distribution for scenario L4.}
   \label{fig:plotl4}
 \end{figure}
 
-\Section{Simulation Results}
+\section{Simulation Results}
 \label{sec:simulation-results}
 
 As mentioned in Section \ref{sec:configurations}, not all
@@ -383,7 +356,7 @@ this behavior, and then, Section \ref{sec:indiv-simul-results}
 describes the results that highlight any differences in performance
 between the hard and soft reservation schemes.
 
-\SubSection{Equivalent Reservation Performance}
+\subsection{Equivalent Reservation Performance}
 \label{sec:noDifference}
 
 In configurations where expired tasks are not discarded, the system is
@@ -403,17 +376,22 @@ before a hard reservation server can. In that case, the soft
 reservation server may suffer some deadline postponements, but can
 never finish executing a given job after an equivalent hard
 reservation server. Hence, in general, not discarding expired tasks
-makes soft and hard reservation completely equivalent.
+makes soft and hard reservation completely equivalent, and we will
+omit the results for the simulations that do not discard expired
+tasks.
 
 \subsubsection{Overloaded system}
 \label{sec:system-load}
 
 When the system is always perfectly dimensioned or overloaded (there
-is no system idle time) both reservation schemes are equivalent. This
-is so because a soft reservation server will only use extra budget
-obtained by postponing its deadline when there are no other tasks with
-a higher priority than its next deadline, and this situation is
-unlikely in an overloaded system.
+is no system idle time, or, equivalently, all the demand for the
+servers plus the background tasks is more than 1) both reservation
+schemes are equivalent. This is so because a soft reservation server
+will only use extra budget obtained by postponing its deadline when
+there are no other tasks with a higher priority than its next
+deadline, and this situation is unlikely in an overloaded system. For
+this reason we only report the results of underloaded and correctly
+dimensioned systems.
 
 \subsubsection{Underloaded server}
 \label{sec:server-load}
@@ -426,7 +404,7 @@ equivalent, because, as less budget is needed per server period than
 the server capacity, there will be very infrequent budget
 exhaustion.
 
-\SubSection{Unequivalent Performance}
+\subsection{Unequivalent Performance}
 \label{sec:indiv-simul-results}
 
 Table \ref{tab:summary} summarizes the simulation results for the
@@ -446,7 +424,8 @@ tasks. Hence, a more realiable picture of how the servers behave under
 each scenario can be pieced by looking at the mean wait time and the
 deadline miss ratio. These metrics show that a soft reservation server
 outperforms a hard reservation server in all simulated scenarios. The
-next sections go over each scenario in higher detail.
+next sections go over each scenario in higher detail. All these
+scenarios are run discarding completed tasks.
 
 \begin{table}[ht]
   \centering
@@ -475,11 +454,11 @@ next sections go over each scenario in higher detail.
 \begin{figure}[t]
   \centering
   \subfloat[Soft reservation.]{
-    \includegraphics[scale=0.31]{rthisto1}
+    \includegraphics[scale=0.26]{rthisto1}
     \label{fig:soft-rth}
-  }\\
+  }
   \subfloat[Hard reservation.]{
-    \includegraphics[scale=0.31]{rthisto2}
+    \includegraphics[scale=0.26]{rthisto2}
     \label{fig:hard-rth}
   }
   \caption{Response time histograms for scenario L1.}
@@ -489,11 +468,11 @@ next sections go over each scenario in higher detail.
 \begin{figure}[t]
   \centering
   \subfloat[Soft reservation.]{
-    \includegraphics[scale=0.31]{dthisto1}
+    \includegraphics[scale=0.26]{dthisto1}
     \label{fig:soft-dth}
-  }\\
+  }
   \subfloat[Hard reservation.]{
-    \includegraphics[scale=0.31]{dthisto2}
+    \includegraphics[scale=0.26]{dthisto2}
     \label{fig:hard-dth}
   }
   \caption{Wait time histograms for scenario L1.}
@@ -519,11 +498,11 @@ that are delayed by more than that miss their deadlines.
 \begin{figure}[t]
   \centering
   \subfloat[Soft reservation.]{
-    \includegraphics[scale=0.31]{trifasico-1}
+    \includegraphics[scale=0.26]{trifasico-1}
     \label{fig:soft-trifasico}
-  }\\
+  }
   \subfloat[Hard reservation.]{
-    \includegraphics[scale=0.31]{trifasico-2}
+    \includegraphics[scale=0.26]{trifasico-2}
     \label{fig:hard-trifasico}
   }
   \caption{Response times for scenario L2.}
@@ -537,33 +516,36 @@ In this experiment, the task set first starts with a correctly
 dimensioned server, until time $t=3000$, when the mean costs for the
 tasks rise suddenly. After a while, the costs return to normal. Figure
 \ref{fig:trifasico} shows the response times for this scenario. The
-wait times, not shown specifically, follow a similar pattern. Each
-point $(x,y)$ in the graph represents a task that, finishing at time
-$x$, had a response time of $y$. Therefore, when the same area is
-denser in one graph (as happens in the middle section of this
-scenario), it means that the server with a higher density completed
-more tasks. This kind of graph, while not precisely describing the
-distribution of the response times, shows a clear picture of how they
-change over time. As this figure shows, in the heavily loaded part
-only the soft reservation server can finish tasks that need more than
-the server budget. This suggests that the soft reservation server is
-better able to cope with run-time varying requirements. Also, when the
-load comes back down there is no extra cost for the soft reservation
-server, and its response times are equivalent to the response times
-for the hard reservation server. Thus, in variable environments a soft
-reservation scheme seems more suitable for situations where the
-application load changes over time. This information might be relevant
-for soft real-time systems running some adaptation mechanism, such as
-the one described by Abeni et al. \cite{abeni.ea05:qos}.
+wait times, not shown specifically, follow a similar pattern. It is
+good to note that, as seen in figure \ref{fig:hard-trifasico}, all
+tasks in the higher demand section are discarded by the hard
+reservation server due to deadline missing.  Each point $(x,y)$ in the
+graph represents a task that, finishing at time $x$, had a response
+time of $y$. Therefore, when the same area is denser in one graph (as
+happens in the middle section of this scenario), it means that the
+server with a higher density completed more tasks. This kind of graph,
+while not precisely describing the distribution of the response times,
+shows a clear picture of how they change over time. As this figure
+shows, in the heavily loaded part only the soft reservation server can
+finish tasks that need more than the server budget. This suggests that
+the soft reservation server is better able to cope with run-time
+varying requirements. Also, when the load comes back down there is no
+extra cost for the soft reservation server, and its response times are
+equivalent to the response times for the hard reservation
+server. Thus, in variable environments a soft reservation scheme seems
+more suitable for situations where the application load changes over
+time. This information might be relevant for soft real-time systems
+running some adaptation mechanism, such as the one described by Abeni
+et al. \cite{abeni.ea05:qos}.
 
 \begin{figure}[t]
   \centering
   \subfloat[Soft reservation.]{
-    \includegraphics[scale=0.31]{variance-1}
+    \includegraphics[scale=0.26]{variance-1}
     \label{fig:soft-variance}
-  }\\
+  }
   \subfloat[Hard reservation.]{
-    \includegraphics[scale=0.31]{variance-2}
+    \includegraphics[scale=0.26]{variance-2}
     \label{fig:hard-variance}
   }
   \caption{Response times for scenario L3.}
@@ -592,11 +574,11 @@ server, thus behaving better on task sets with a high variance.
 \begin{figure}[t]
   \centering
   \subfloat[Soft reservation.]{
-    \includegraphics[scale=0.31]{eve-1}
+    \includegraphics[scale=0.26]{eve-1}
     \label{fig:soft-eve}
-  } \\
+  } 
   \subfloat[Hard reservation.]{
-    \includegraphics[scale=0.31]{eve-2}
+    \includegraphics[scale=0.26]{eve-2}
     \label{fig:hard-eve}
   }
   \caption{Wait times for scenario L4, the movie trace.}
@@ -638,7 +620,7 @@ substantially higher than the mean deadline miss ratio of the soft
 reservation servers. Indeed, the trends observed for scenario L4 are
 replicated.
 
-\Section{Conclusion}
+\section{Conclusion}
 \label{sec:conclusion}
 
 Reservation-based scheduling has been increasingly used to support
@@ -659,6 +641,6 @@ quality of service. We believe that the results and scenarios
 presented here can be used by designers to support their
 implementation decisions.
 
-\bibliographystyle{latex8}
+\bibliographystyle{sbc}
 \bibliography{bib}
 \end{document}

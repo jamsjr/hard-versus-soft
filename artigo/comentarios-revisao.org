@@ -1,0 +1,129 @@
+
+* não corrigíveis:
+** parecerista 1:
+a contribuição está na amplitude do estudo e a aplicação dos
+resultados para direcionar projetos de sistemas. O artigo poderia
+explorar melhor a segunda parte.
+
+Não está clara a representatividade dos cenários em relação às
+aplicações reais. Por exemplo, decodificação de vídeo leva em conta a
+variabilidade do conteúdo e consome muito recursos de processamento -
+faz sentido o cenário 4 da forma como foi especificado?
+
+** parecerista 2
+
+This paper presents a comparison between two variants of CBS, with hard
+and soft reservation schemes. Several scenarios were simulated in order
+to compare their qualities. In many scenarios the authors conclude they
+are equivalent, but in five scenarios they were able to indicate the
+soft variation as the best one. Simulator is home grown, but it is
+available for download.
+
+This is an important study when we consider the vast array of servers
+algorithms in the literature. It provides some information that could be
+useful to a real-time system designer.
+
+Text is well writen and well organized.
+
+The simulation study tested a wide variation of conditions, what was
+very good. Simulation conditions are described, although some details
+might be missing. But I supose this is not a problem since the authors
+provide a URL to download the simulator source code.
+
+One thing that was not clear to me is how Q and T are defined. Values
+are presented, but it was never described why those values are used. I
+wonder if the fine tunning of server parameters, considering each server
+version differently, couldn´t improve or somehow change the results of
+the comparison. Is there an optimal value for Q and T, given a certain
+server load ? Shouldn't be a sensitivity analysis regarding Q and T ?
+
+Statistical results are very intersting, but I am not sure it sets the
+case in favor of the soft reservation server.
+
+In some scenarios it was not clear if discards were possible. For
+instance, Figure 4, the empty space in the middle of 4(b) means that all
+tasks are being discarded ? It is not clear in what scenarios there is
+the discard of late tasks.
+
+If section 1.1 of this paper is correct, this is certainly a subject to
+be better investigated. Specially the possibility of adapting the server
+according to the situation at the moment, although results of this paper
+indicate that the soft version is always better.
+
+
+** parecerista 3:
+
+This paper presents simulation results that compare HARD to SOFT
+reservations for CBS.  Throughout the paper, the authors say that it's
+to substantiate the choices of implementor, but the conclusions from
+the simulation studies ALL point to SOFT reservations being better.
+Therefore, either the paper should state that unequivocally and
+unambigously, or it should show results for when the HARD reservations
+are better.
+
+The simulations could be better explained and presented.  The only
+parameter that is boolean is to discard tasks or not when they miss
+their deadlines.  The others have values, but it's not really clear what
+the values are.  For example, execution cost variance could influence
+tremendously the results, it seems, but the actual values are not really
+discussed.  Another example is in the overload, how much is the system
+actually overloaded? Another issue to strengthen is to convince the
+reader that the scenarios are sufficient for it to be a comprehensive
+study: What is the input space, and how do your input stack up to that?
+What is the coverage, are you biased, are your results statistically
+significant?
+
+In section 3, the authors should correlate the info in Sect 3.1 and
+3.2...   It would be better for the reader to understand. The scenario
+names could be emphasized and shortened and then used in the plots and
+rest of the paper, rather than using L1, L2, ... L2 and L3 are basically
+independent experiments, since there is no influence of a time interval
+on the next.   In L4 and L5, the server bandwidth matches EXACTLY the
+load offered by the movies: the interesting part is when you cannot
+predict exactly the load, then what happens to CBS reservations; here's
+where adaptation might be better.
+
+Section 4 does not say if SOFT and HARD performed well or badly, just
+that they are the same.  And it doesn't seem that they are equivalent. -
+4.1.1: does the load influence the results?  Why/why not?  SOFT may
+finish earlier, so they'd not be eqv, like in the other results. -
+4.1.2: if the overload comes from the tasks serviced by CBS servers and
+not the HARD real-time task, this doesn't seem a plausible explanation -
+4.2: You only tested underloaded systems or you only reported
+underloaded systems???  What does it mean "failing to serve" (is it
+discard or postpone execution)?
+
+In Table 1, the results are with discards or not?  It seems important to
+report these metrics and the text suggests that a single existing metric
+is not good enough.  So, the authors can suggest a new metric that would
+be better representant of the type of results they want to show.
+
+** parecerista 4:
+
+
+  The abstract must be edited again.
+
+ This paper compares by simulation HARD and SOFT reservations for CBS,
+ showing that SOFT reservations are better. However, throughout the text,
+ there is no clear statement showing that these were the simulation
+ results. The authors must adapt the text.
+
+ The overall simulations are not clearly explained, which reduces the
+ legibility of the paper. The overall paper would be much more useful, if
+ the target of the simulations was clearly expressed and the simulation
+ results clearly explained. If the paper is accepted, the authors must
+ solve this problem. For instance, the authors should discuss the
+ influence of overload upon the results. The same about the influence of
+ execution cost.
+
+ Also, the authors must clearly address the coverage of the input data.
+ Otherwise, it is not clear how significant are the simulation results.
+
+* problemas corrigíveis:
+
+** In section 3, the authors should correlate the info in Sect 3.1 and
+3.2...   It would be better for the reader to understand. 
+
+** The scenario names could be emphasized and shortened and then used in the plots and
+rest of the paper, rather than using L1, L2, ...
+
