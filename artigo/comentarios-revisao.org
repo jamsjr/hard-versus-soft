@@ -124,6 +124,3 @@ be better representant of the type of results they want to show.
 ** In section 3, the authors should correlate the info in Sect 3.1 and
 3.2...   It would be better for the reader to understand. 
 
-** The scenario names could be emphasized and shortened and then used in the plots and
-rest of the paper, rather than using L1, L2, ...
-

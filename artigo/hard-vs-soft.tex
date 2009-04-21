@@ -31,6 +31,12 @@
 \newcommand{\simul}{\textbf{RTSimul}} % Que criatividade. Mudar esse
 % nome depois, urgente
 
+\newcommand{\Lum}{\textit{Simple}}
+\newcommand{\Ldois}{\textit{Time}}
+\newcommand{\Ltres}{\textit{Variance}}
+\newcommand{\Lquatro}{\textit{Movie}}
+\newcommand{\Lcinco}{\textit{Complex}}
+
 \sloppy
 
 \author{Alexandre Passos, George Lima}
@@ -285,28 +291,28 @@ of the servers are response time, wait time and deadline miss ratio.
 \subsection{Characterizing the server load}
 \label{sec:charact-server-load}
 
-Five distinct application loads (L1-L5) were considered by varying the
+Five distinct application loads (\Lum{}-\Lcinco{}) were considered by varying the
 execution cost distributions.  For the sake of data analysis, it is
 interesting to observe how hard and soft reservation schemes behave
 with more controlled load distributions. This is the goal of loads
-L1-L3, which takes synthetic generated data. The data correspond to
+\Lum{}-\Ltres{}, which takes synthetic generated data. The data correspond to
 execution times of jobs to be served during $9,000$ time units of
 simulation.  The inter-arrival time of these jobs were kept constant
-and equal to one time unit.  The load L4 was extracted from a movie
+and equal to one time unit.  The load \Lquatro{} was extracted from a movie
 trace and was used to represent more realistic soft-real time
-data. Load L5 uses the same trace as load L4 but runs 5 independent
+data. Load \Lcinco{} uses the same trace as load \Lquatro{} but runs 5 independent
 servers competing for the processor. The characteristics of these five
 load scenarios are given below.
 
 \begin{description}
-\item L1: Constant mean execution time and low variance. Job execution
+\item \Lum{}: Constant mean execution time and low variance. Job execution
   costs were generated during the simulation time, set to $9,000$ time
   units, according to a normal distribution with mean $0.4$ and (low)
   variance equal to $0.01$. In other words, the execution cost of each
   job to be served follows $\mathcal{N}(0.4,0.01)$. The background
   task, in this scenario, consumes 60\% of the processor time. The
   server's capacity is $0.4$ and its period is $1$ time unit.
-\item L2: Variable mean execution time and low variance.  In order to
+\item \Ldois{}: Variable mean execution time and low variance.  In order to
   simulate controlled variation of execution times, two values for the
   mean execution time were considered, sampled from
   $\mathcal{N}(0.6,0.01)$ and $\mathcal{N}(0.4,0.01)$. During the time
@@ -317,14 +323,14 @@ load scenarios are given below.
   of its execution. The background task, in this scenario, consumes
   60\% of the processor time. The server's capacity is $0.46$ and its
   period is $1$ time unit.
-\item L3: Constant mean execution time and variable variance.  Another
+\item \Ltres{}: Constant mean execution time and variable variance.  Another
   simulated scenario considered two simulation intervals, $[0;4,500)$
   and $[4,500;9,000)$.  The execution costs for these intervals
   followed two distributions, $\mathcal{N}(0.5,0.01)$ and
   $\mathcal{N}(0.5,0.1)$. The background task consumes 50\% of the
   processor time, the server's capacity is $0.5$ and its period is $1$
   time unit.
-\item L4: A movie trace. The execution cost distribution are shown in
+\item \Lquatro{}: A movie trace. The execution cost distribution are shown in
   Figure \ref{fig:plotl4}. The values in the graph correspond to the
   decoding times using the \texttt{FFMPEG} video decoding library for
   the Eve movie. In this trace jobs arrive with a mean period of 0.072
@@ -333,8 +339,8 @@ load scenarios are given below.
   reservation schemes with a real-life data set. The background task
   consumes 90\% of the processor time. The server's capacity is
   $0.0065$ and its period is $0.072$ time units.
-\item L5: A complex scenario. Five competing servers, each with the
-  same task set as scenario L4. Each server has capacity $0.0065$ and
+\item \Lcinco{}: A complex scenario. Five competing servers, each with the
+  same task set as scenario \Lquatro{}. Each server has capacity $0.0065$ and
   period $0.072$, and the background task takes 50\% of the processor
   time.
 \end{description}
@@ -342,7 +348,7 @@ load scenarios are given below.
 \begin{figure}[h!t]
   \centering
   \includegraphics[scale=0.26]{trace-eve}
-  \caption{Execution cost distribution for scenario L4.}
+  \caption{Execution cost distribution for scenario \Lquatro{}.}
   \label{fig:plotl4}
 \end{figure}
 
@@ -413,10 +419,10 @@ the background hard real-time task, since its hitting all its
 deadlines is guaranteed by our usage of the EDF algorithm and the
 system utilization being kept below 1. It can be easily seen that a
 soft reservation server has usually a much smaller deadline miss ratio
-than a hard reservation server in the same scenario. In scenario L5,
+than a hard reservation server in the same scenario. In scenario \Lcinco{},
 the table shows the mean response time, wait time and deadline miss
 ratio over all five servers in that scenario. The mean response times
-are mostly similar, except for scenarios L4 and L5. It is important to
+are mostly similar, except for scenarios \Lquatro{} and \Lcinco{}. It is important to
 note that comparing mean response time of servers with different
 deadline miss ratios is not reliable, since a server can always reduce
 its mean response time by failing to serve more demanding
@@ -431,15 +437,15 @@ scenarios are run discarding completed tasks.
   \centering
   \begin{tabular}[t]{rrrrr} \hline
     \textsc{LS} & \textsc{RS} & \textsc{Mean RT} & \textsc{Mean WT} & \textsc{DMR (\%)} \\ \hline
-    \multirow{2}{*}{L1} & Soft & $5.1\times 10^{-1}$   & $1.1\times 10^{-1}$   & 5.4  \\
+    \multirow{2}{*}{\Lum{}} & Soft & $5.1\times 10^{-1}$   & $1.1\times 10^{-1}$   & 5.4  \\
                         & Hard & $5.6\times 10^{-1}$   & $1.2\times 10^{-1}$   & 59.8 \\ \hline
-    \multirow{2}{*}{L2} & Soft & $4.8\times 10^{-1}$   & $1.2\times 10^{-1}$   & 14.4 \\
+    \multirow{2}{*}{\Ldois{}} & Soft & $4.8\times 10^{-1}$   & $1.2\times 10^{-1}$   & 14.4 \\
                         & Hard & $4.4\times 10^{-1}$   & $1.7\times 10^{-1}$   & 37.5 \\ \hline
-    \multirow{2}{*}{L3} & Soft & $5.7\times 10^{-1}$   & $8.0\times 10^{-2}$   & 5.1  \\
+    \multirow{2}{*}{\Ltres{}} & Soft & $5.7\times 10^{-1}$   & $8.0\times 10^{-2}$   & 5.1  \\
                         & Hard & $5.8\times 10^{-1}$   & $1.2\times 10^{-1}$   & 59.4 \\ \hline
-    \multirow{2}{*}{L4} & Soft & $6.5\times 10^{-3}$   & $3.3\times 10^{-4}$   & 0.1  \\
+    \multirow{2}{*}{\Lquatro{}} & Soft & $6.5\times 10^{-3}$   & $3.3\times 10^{-4}$   & 0.1  \\
                         & Hard & $3.5\times 10^{-2}$   & $5.6\times 10^{-3}$   & 24.5 \\ \hline    
-    \multirow{2}{*}{L5} & Soft & $2.5\times 10^{-3}$   & $6.4\times 10^{-4}$   & 0.56  \\
+    \multirow{2}{*}{\Lcinco{}} & Soft & $2.5\times 10^{-3}$   & $6.4\times 10^{-4}$   & 0.56  \\
                         & Hard & $3.8\times 10^{-2}$   & $1.2\times 10^{-2}$   & 23.9 \\ \hline    
   \end{tabular}
   \caption{Result summary, with the mean response time (RT), wait time
@@ -448,7 +454,7 @@ scenarios are run discarding completed tasks.
   \label{tab:summary}
 \end{table}
 
-\subsubsection{Scenario L1}
+\subsubsection{Scenario \Lum{}}
 \label{sec:scenario-l1}
 
 \begin{figure}[t]
@@ -461,7 +467,7 @@ scenarios are run discarding completed tasks.
     \includegraphics[scale=0.26]{rthisto2}
     \label{fig:hard-rth}
   }
-  \caption{Response time histograms for scenario L1.}
+  \caption{Response time histograms for scenario \Lum{}.}
   \label{fig:rth}
 \end{figure}
 
@@ -475,12 +481,12 @@ scenarios are run discarding completed tasks.
     \includegraphics[scale=0.26]{dthisto2}
     \label{fig:hard-dth}
   }
-  \caption{Wait time histograms for scenario L1.}
+  \caption{Wait time histograms for scenario \Lum{}.}
   \label{fig:dth}
 \end{figure}
 
 A general idea of how soft and hard reservation can behave might be
-given by a simulation with the costs in scenario L1. Since the
+given by a simulation with the costs in scenario \Lum{}. Since the
 distribution of the execution costs is normal and constant throughout
 the simulation, the distribution of response and wait times is better
 characterized by a histogram. These are shown in Figures \ref{fig:rth}
@@ -505,11 +511,11 @@ that are delayed by more than that miss their deadlines.
     \includegraphics[scale=0.26]{trifasico-2}
     \label{fig:hard-trifasico}
   }
-  \caption{Response times for scenario L2.}
+  \caption{Response times for scenario \Ldois{}.}
   \label{fig:trifasico}
 \end{figure}
 
-\subsubsection{Scenario L2}
+\subsubsection{Scenario \Ldois{}}
 \label{sec:scenario-l2}
 
 In this experiment, the task set first starts with a correctly
@@ -548,16 +554,16 @@ et al. \cite{abeni.ea05:qos}.
     \includegraphics[scale=0.26]{variance-2}
     \label{fig:hard-variance}
   }
-  \caption{Response times for scenario L3.}
+  \caption{Response times for scenario \Ltres{}.}
   \label{fig:variance}
 \end{figure}
 
-\subsubsection{Scenario L3}
+\subsubsection{Scenario \Ltres{}}
 \label{sec:scenario-l3}
 
 Another possible situation in which a RBS server might have its
 responsivity compromised is when dealing with tasks having a high
-variance in its execution costs. Scenario L3 was designed to test this
+variance in its execution costs. Scenario \Ltres{} was designed to test this
 possibility. This might happen because to serve tasks with
 unexpectedly high costs, a soft reservation server might need to
 postpone its deadline too much, while a hard reservation server would
@@ -581,17 +587,17 @@ server, thus behaving better on task sets with a high variance.
     \includegraphics[scale=0.26]{eve-2}
     \label{fig:hard-eve}
   }
-  \caption{Wait times for scenario L4, the movie trace.}
+  \caption{Wait times for scenario \Lquatro{}, the movie trace.}
   \label{fig:eve}
 \end{figure}
 
-\subsubsection{Scenario L4}
+\subsubsection{Scenario \Lquatro{}}
 \label{sec:scenario-l4}
 
 Another very important test case is whether, in non-synthetic tasks,
 the performance characteristics we observed are reproduced. In this
 experiment, we ran both a soft reservation server and a hard
-reservation server on scenario L4. Figure \ref{fig:eve} shows the wait
+reservation server on scenario \Lquatro{}. Figure \ref{fig:eve} shows the wait
 time for both a hard and a soft reservation servers running this task
 set. The response time follows a similar pattern and can be ommitted
 from this paper. As can be easily seen, the wait time for the hard
@@ -609,7 +615,7 @@ it will have to wait for capacity replenishment before continuing
 execution. Therefore, on average, the soft reservation scheme seems
 more responsive.
 
-\subsubsection{Scenario L5}
+\subsubsection{Scenario \Lcinco{}}
 \label{sec:scenario-l5}
 
 This scenario aims to show that increasing the complexity of the
@@ -617,7 +623,7 @@ situation does not change perceptively the characteristics of hard and
 soft reservation. As can be seen in Table \ref{tab:summary}, the mean
 deadline miss ratio of the hard reservation servers is still
 substantially higher than the mean deadline miss ratio of the soft
-reservation servers. Indeed, the trends observed for scenario L4 are
+reservation servers. Indeed, the trends observed for scenario \Lquatro{} are
 replicated.
 
 \section{Conclusion}
